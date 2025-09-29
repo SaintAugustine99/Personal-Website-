@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 360px;
+            background: #f5f5f5;
+        }
+        #canvas {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        // Your visualization code here
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 600;
+        canvas.height = 400;
+        
+        // Example: Simple animation
+        let frame = 0;
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Your drawing code here
+            ctx.fillStyle = `hsl(${frame % 360}, 70%, 50%)`;
+            ctx.fillRect(100, 100, 200, 200);
+            
+            frame++;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
