@@ -1,13 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+// src/main.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
-import App from './App.jsx'
-import './index.css' // Your main stylesheet
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyles } from './styles/GlobalStyles.js';
+import { theme } from './styles/theme.js';
+import App from './App.jsx';
+import './index.css'; // You can keep this or remove it
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <App />
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
-)
+);
