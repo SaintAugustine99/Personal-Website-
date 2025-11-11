@@ -33,7 +33,8 @@ const DesktopIcon = ({ label, onClick }) => {
   const isFile = label.includes('.');
   
   return (
-    <IconWrapper onDoubleClick={onClick}>
+    // <-- THIS IS THE FIX: Changed 'onDoubleClick' to 'onClick' -->
+    <IconWrapper onClick={onClick}>
       <IconVisual>
         {isFile ? <FaFileAlt /> : <FaFolder />}
       </IconVisual>
