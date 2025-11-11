@@ -1,4 +1,5 @@
 from rest_framework import viewsets, permissions
+from rest_framework.response import Response
 from .models import BlogPost
 from .serializers import BlogPostSerializer
 import markdown2 # Keep markdown2
@@ -27,4 +28,4 @@ class BlogPostViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             data['content_html'] = instance.content
 
-        return viewsets.Response(data)
+        return Response(data)
