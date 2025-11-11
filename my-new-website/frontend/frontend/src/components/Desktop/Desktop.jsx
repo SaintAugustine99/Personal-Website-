@@ -3,20 +3,18 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Window from './Window.jsx';
 import DesktopIcon from './DesktopIcon.jsx';
-// <-- 1. REMOVED Starfield import -->
+import Starfield from '../Starfield.jsx'; 
+import Taskbar from './Taskbar.jsx';         // <-- 1. IMPORT
+import StartMenu from './StartMenu.jsx';     // <-- 2. IMPORT
 import About from '../../pages/About.jsx';
 import Blog from '../../pages/Blog.jsx';
 import Portfolio from '../../pages/Portfolio.jsx';
 import Contact from '../../pages/Contact.jsx';
-// We'll import games here later
-// import SnakeGame from '../../games/SnakeGame.jsx';
 
-// <-- 2. MODIFIED the background -->
 const DesktopWrapper = styled.div`
   width: 100vw;
   height: 100vh;
-  /* This is your new "Bliss" wallpaper from the /public folder */
-  background: url('/desktop-bg.jpg') center center / cover no-repeat;
+  background: linear-gradient(135deg, #0B0C10, #1F2833);
   overflow: hidden;
   position: relative;
   font-family: ${({ theme }) => theme.fonts.body};
@@ -33,19 +31,26 @@ const IconsWrapper = styled.div`
 `;
 
 const Desktop = () => {
-  // This state will manage all our open windows
   const [openApps, setOpenApps] = useState([]);
+  // <-- 3. ADD NEW STATE for Start Menu -->
+  const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
 
   // Function to open a new app (window)
+  // <-- 4. BUG FIX HERE (removed the extra '.') -->
   const openApp = (app) => {
-    // Prevent opening the same app multiple times
     if (openApps.find(a => a.id === app.id)) return;
     setOpenApps(prev => [...prev, app]);
+    setIsStartMenuOpen(false); // Close menu when app opens
   };
 
   // Function to close an app
   const closeApp = (appId) => {
     setOpenApps(prev => prev.filter(app => app.id !== appId));
+  };
+  
+  // <-- 5. ADD NEW FUNCTION to toggle menu -->
+  const toggleStartMenu = () => {
+    setIsStartMenuOpen(prev => !prev);
   };
 
   // Define our "apps"
@@ -74,25 +79,25 @@ const Desktop = () => {
 
   return (
     <DesktopWrapper>
-      {/* <-- 3. REMOVED <Starfield /> -->
+      <Starfield />
 
       {/* 1. Desktop Icons */}
       <IconsWrapper>
         <DesktopIcon 
           label="About Me.txt" 
-          onClick={() => openApp(apps.about)} 
+          onDoubleClick={() => openApp(apps.about)} // <-- 6. Changed to onDoubleClick
         />
         <DesktopIcon 
           label="Portfolio" 
-          onClick={() => openApp(apps.portfolio)} 
+          onDoubleClick={() => openApp(apps.portfolio)} // <-- 6. Changed to onDoubleClick
         />
         <DesktopIcon 
           label="Blog" 
-          onClick={() => openApp(apps.blog)} 
+          onDoubleClick={() => openApp(apps.blog)} // <-- 6. Changed to onDoubleClick
         />
          <DesktopIcon 
           label="Contact" 
-          onClick={() => openApp(apps.contact)} 
+          onDoubleClick={() => openApp(apps.contact)} // <-- 6. Changed to onDoubleClick
         />
       </IconsWrapper>
 
@@ -106,6 +111,16 @@ const Desktop = () => {
           {app.content}
         </Window>
       ))}
+
+      {/* <-- 7. ADD Start Menu & Taskbar --> */}
+      <Taskbar onToggleStartMenu={toggleStartMenu} />
+      {isStartMenuOpen && (
+        <StartMenu 
+          apps={apps} 
+          openApp={openApp} 
+          onClose={() => setIsStartMenuOpen(false)} 
+        />
+      )}
     </DesktopWrapper>
   );
 };

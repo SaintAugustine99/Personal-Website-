@@ -8,13 +8,13 @@ const IconWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  color: ${({ theme }) => theme.colors.text};
+  color: #FFD700; /* Solid Yellow */
   cursor: pointer;
   width: 80px;
   text-align: center;
   
   &:hover {
-    color: ${({ theme }) => theme.colors.teal};
+    color: #FFFFFF; 
   }
 `;
 
@@ -27,14 +27,16 @@ const IconLabel = styled.span`
   background: rgba(0,0,0,0.3);
   padding: 2px 5px;
   border-radius: 3px;
+  color: #FFFFFF;
 `;
 
-const DesktopIcon = ({ label, onClick }) => {
+// <-- 1. Renamed prop to 'onDoubleClick' -->
+const DesktopIcon = ({ label, onDoubleClick }) => {
   const isFile = label.includes('.');
   
   return (
-    // <-- THIS IS THE FIX: Changed 'onDoubleClick' to 'onClick' -->
-    <IconWrapper onClick={onClick}>
+    // <-- 2. Changed event to 'onDoubleClick' -->
+    <IconWrapper onDoubleClick={onDoubleClick}>
       <IconVisual>
         {isFile ? <FaFileAlt /> : <FaFolder />}
       </IconVisual>
