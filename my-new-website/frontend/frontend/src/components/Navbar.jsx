@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { FaGithub, FaYoutube, FaTwitter } from 'react-icons/fa';
 
 const NavWrapper = styled.nav`
   position: fixed;
@@ -40,6 +41,13 @@ const Logo = styled(NavLink)`
   }
 `;
 
+// This new wrapper will hold both navigation and social links
+const NavRightWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3rem; // Space between nav links and social icons
+`;
+
 const NavLinks = styled.div`
   display: flex;
   gap: 2rem;
@@ -61,18 +69,56 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+// New component for social icons
+const SocialLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+`;
+
+// New component for a single social icon link
+const SocialLink = styled.a`
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: 1.25rem; // Make icons a bit bigger
+  transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.violet};
+    transform: scale(1.1);
+    text-shadow: ${({ theme }) => theme.glowViolet};
+  }
+`;
+
+
 const Navbar = () => {
   return (
     <NavWrapper>
       <NavContainer>
         <Logo to="/">
-          [Site Name]<span>.</span>
+          Onserio Ogeto<span>.</span>
         </Logo>
-        <NavLinks>
-          <StyledNavLink to="/">Home</StyledNavLink>
-          <StyledNavLink to="/blog">Blog</StyledNavLink>
-          <StyledNavLink to="/contact">Contact</StyledNavLink>
-        </NavLinks>
+        
+        <NavRightWrapper>
+          <NavLinks>
+            <StyledNavLink to="/">Home</StyledNavLink>
+            <StyledNavLink to="/blog">Blog</StyledNavLink>
+            <StyledNavLink to="/portfolio">Portfolio</StyledNavLink> {/* <-- ADDED */}
+            <StyledNavLink to="/contact">Contact</StyledNavLink>
+          </NavLinks>
+
+          <SocialLinks>
+            <SocialLink href="https://github.com/saintaugustine99" target="_blank" rel="noopener noreferrer">
+              <FaGithub />
+            </SocialLink>
+            <SocialLink href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+              <FaYoutube />
+            </SocialLink>
+            <SocialLink href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <FaTwitter />
+            </SocialLink>
+          </SocialLinks>
+        </NavRightWrapper>
+
       </NavContainer>
     </NavWrapper>
   );
