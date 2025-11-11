@@ -1,3 +1,4 @@
+// src/components/Navbar.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -41,7 +42,6 @@ const Logo = styled(NavLink)`
   }
 `;
 
-// This new wrapper will hold both navigation and social links
 const NavRightWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -69,14 +69,12 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-// New component for social icons
 const SocialLinks = styled.div`
   display: flex;
   align-items: center;
   gap: 1.5rem;
 `;
 
-// New component for a single social icon link
 const SocialLink = styled.a`
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: 1.25rem; // Make icons a bit bigger
@@ -101,8 +99,9 @@ const Navbar = () => {
         <NavRightWrapper>
           <NavLinks>
             <StyledNavLink to="/">Home</StyledNavLink>
+            <StyledNavLink to="/about">About</StyledNavLink> {/* <-- ADDED */}
             <StyledNavLink to="/blog">Blog</StyledNavLink>
-            <StyledNavLink to="/portfolio">Portfolio</StyledNavLink> {/* <-- ADDED */}
+            <StyledNavLink to="/portfolio">Portfolio</StyledNavLink>
             <StyledNavLink to="/contact">Contact</StyledNavLink>
           </NavLinks>
 
