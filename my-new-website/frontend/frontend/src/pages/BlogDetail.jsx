@@ -10,10 +10,29 @@ const API_URL = "http://127.0.0.1:8000";
 const PostContainer = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  // <-- MODIFIED: Remove padding to let image be flush -->
+  padding: 0; 
   background: rgba(31, 40, 51, 0.3);
   border: 1px solid ${({ theme }) => theme.colors.lightBg};
   border-radius: 8px;
+  overflow: hidden; // <-- NEW: Keep image corners rounded -->
+`;
+
+// <-- NEW: Styled component for the main image -->
+const PostImage = styled.img`
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightBg};
+`;
+
+// <-- NEW: Wrapper for all the text content -->
+const PostTextWrapper = styled.div`
+  padding: 2rem 3rem 3rem;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
 `;
 
 const PostTitle = styled.h1`
@@ -28,32 +47,28 @@ const PostMeta = styled.p`
   margin-bottom: 2rem;
 `;
 
-// This component will style the HTML we get from Django
 const PostContent = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: 1.1rem;
   line-height: 1.7;
 
+  // ... (all the h2, p, code styles are unchanged) ...
   h2, h3, h4 {
     color: ${({ theme }) => theme.colors.text};
     margin-top: 2rem;
     margin-bottom: 1rem;
     font-weight: 700;
   }
-  
   h2 { font-size: 2rem; }
   h3 { font-size: 1.5rem; }
-
   p {
-    color: ${({ theme }) => theme.colors.textSecondary}; // Fixed typo here
+    color: ${({ theme }) => theme.colors.textSecondary};
     margin-bottom: 1.5rem;
   }
-  
   a {
     color: ${({ theme }) => theme.colors.teal};
     text-decoration: underline;
   }
-
   pre {
     background: ${({ theme }) => theme.colors.darkBg};
     border: 1px solid ${({ theme }) => theme.colors.lightBg};
@@ -63,7 +78,6 @@ const PostContent = styled.div`
     font-size: 0.9rem;
     margin: 1.5rem 0;
   }
-  
   code {
     font-family: 'Fira Code', 'Menlo', 'monospace';
   }
@@ -92,10 +106,9 @@ const BlogDetail = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { slug } = useParams(); // Gets the 'slug' from the URL
+  const { slug } = useParams();
 
   useEffect(() => {
-    // Fetch the single post using its slug
     axios.get(`${API_URL}/api/blog/posts/${slug}/`)
       .then(response => {
         setPost(response.data);
@@ -106,7 +119,7 @@ const BlogDetail = () => {
         setError("Failed to load post.");
         setLoading(false);
       });
-  }, [slug]); // Re-run this effect if the slug changes
+  }, [slug]);
 
   if (loading) return <p>Loading post...</p>;
   if (error) return <p>{error}</p>;
@@ -118,16 +131,24 @@ const BlogDetail = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <BackLink to="/blog">← Back to Blog</BackLink>
-      <PostTitle>{post.title}</PostTitle>
-      <PostMeta>
-        {formatDate(post.created)}
-      </PostMeta>
       
-      {/* This is the magic part: it renders the HTML from your backend */}
-      <PostContent 
-        dangerouslySetInnerHTML={{ __html: post.content_html }} 
-      />
+      {/* // <-- NEW: Add the featured image at the top --> */}
+      {post.featured_image && (
+        <PostImage src={`${API_URL}${post.featured_image}`} alt={post.title} />
+      )}
+
+      {/* // <-- NEW: Wrap all text content in the wrapper --> */}
+      <PostTextWrapper>
+        <BackLink to="/blog">← Back to Blog</BackLink>
+        <PostTitle>{post.title}</PostTitle>
+        <PostMeta>
+          {formatDate(post.created)}
+        </PostMeta>
+        
+        <PostContent 
+          dangerouslySetInnerHTML={{ __html: post.content_html }} 
+        />
+      </PostTextWrapper>
 
     </PostContainer>
   );
