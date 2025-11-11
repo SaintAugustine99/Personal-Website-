@@ -1,36 +1,15 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render, redirect
-from django.views.generic import FormView, TemplateView
-from django.contrib import messages
-from django.urls import reverse_lazy
+# my-new-website/backend/personal_website/contact/views.py
+from rest_framework import generics
 from .models import ContactMessage
+from .serializers import ContactMessageSerializer
 
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from django.contrib import messages
-from django.urls import reverse_lazy
-from .models import ContactMessage
-
-class ContactFormView(TemplateView):
-    template_name = 'contact/contact_form.html'
+class ContactMessageCreateView(generics.CreateAPIView):
+    """
+    API endpoint that allows new contact messages to be created.
+    Accepts POST requests from the React contact form.
+    """
+    queryset = ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer
     
-    def post(self, request, *args, **kwargs):
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        subject = request.POST.get('subject')
-        message = request.POST.get('message')
-        
-        ContactMessage.objects.create(
-            name=name,
-            email=email,
-            subject=subject,
-            message=message
-        )
-        
-        messages.success(request, 'Your message has been sent successfully!')
-        return redirect('contact:contact_success')
-
-class ContactSuccessView(TemplateView):
-    template_name = 'contact/contact_success.html'
+    # You can add permissions here later, like:
+    # permission_classes = [permissions.AllowAny]

@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/portfolio/', include('portfolio.urls')),
 
     # remember to create an API for contact later
-    # path('api/contact/', include('contact.urls')),
+    path('api/contact/', include('contact.urls')),
 ]
 
 if settings.DEBUG:
