@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Coordinate Tracer</title>
+    <style>
+        body { background: #222; color: #fff; font-family: sans-serif; }
+        canvas { border: 1px solid white; }
+    </style>
+</head>
+<body>
+    <h1>Image Tracer</h1>
+    <p>Check the console for the coordinate array.</p>
+    <canvas id="previewCanvas"></canvas>
+
+    <script>
+        // --- Settings to Tweak ---
+        const IMAGE_SRC = 'image_74f18b.png';
+        
+        // How many pixels to skip. Higher = fewer points, better performance.
+        const SAMPLING_DENSITY = 4; 
+        
+        // 0 (black) to 255 (white). 
+        // We'll grab pixels *darker* than this value.
+        // Since your image has a light background, 200 should be good.
+        const DARKNESS_THRESHOLD = 200; 
+        // ---
+
+        const img = new Image();
+        img.src = IMAGE_SRC;
+        img.onload = () => {
+            const previewCanvas = document.getElementById('previewCanvas');
+            const previewCtx = previewCanvas.getContext('2d');
+            
+            // Use a fixed width for consistency
+            const scale = 500 / img.width; 
+            const canvasWidth = 500;
+            const canvasHeight = img.height * scale;
+
+            previewCanvas.width = canvasWidth;
+            previewCanvas.height = canvasHeight;
+
+            // Draw image to canvas
+            previewCtx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+            
+            // Get pixel data
+            const imageData = previewCtx.getImageData(0, 0, canvasWidth, canvasHeight);
+            const data = imageData.data;
+            
+            const coordinates = [];
+
+            // Loop through pixels
+            for (let y = 0; y < canvasHeight; y += SAMPLING_DENSITY) {
+                for (let x = 0; x < canvasWidth; x += SAMPLING_DENSITY) {
+                    const i = (y * canvasWidth + x) * 4;
+                    
+                    // Get average R, G, B value (grayscale)
+                    const avgColor = (data[i] + data[i+1] + data[i+2]) / 3;
+                    const alpha = data[i+3];
+
+                    // Check if pixel is dark enough and not transparent
+                    if (avgColor < DARKNESS_THRESHOLD && alpha > 200) {
+                        coordinates.push({ x: x, y: y });
+                    }
+                }
+            }
+            
+            console.log(`Generated ${coordinates.length} points.`);
+            // Log the array as a JSON string so we can copy-paste it
+            console.log(JSON.stringify(coordinates));
+            
+            // Optional: Draw the points on the canvas to preview
+            previewCtx.fillStyle = 'rgba(255, 0, 0, 0.5)'; // Red dots
+            for (const coord of coordinates) {
+                previewCtx.fillRect(coord.x, coord.y, 2, 2);
+            }
+        };
+    </script>
+</body>
+</html>

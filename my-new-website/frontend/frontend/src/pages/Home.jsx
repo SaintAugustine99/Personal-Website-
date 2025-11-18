@@ -1,67 +1,76 @@
+// src/pages/Home.jsx
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Button } from '../components/common';
 
 const HeroSection = styled(motion.section)`
-  height: calc(100vh - 16rem); // Full viewport minus nav/padding
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
 `;
 
-const HeroTitle = styled.h1`
-  font-size: 4.5rem;
-  font-weight: 700;
+const LargeTitle = styled.h1`
+  font-size: clamp(3rem, 8vw, 6rem); /* Responsive massive text */
+  font-weight: 800;
+  line-height: 0.95;
+  margin-bottom: 2rem;
   color: ${({ theme }) => theme.colors.text};
-  margin-bottom: 1rem;
   
   span {
-    color: ${({ theme }) => theme.colors.violet};
-    text-shadow: ${({ theme }) => theme.glowViolet};
+    color: transparent;
+    -webkit-text-stroke: 2px ${({ theme }) => theme.colors.accent};
+    display: block; /* Stack the text */
   }
 `;
 
-const HeroSubtitle = styled.p`
+const Subtitle = styled.p`
   font-size: 1.25rem;
   color: ${({ theme }) => theme.colors.textSecondary};
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  max-width: 500px;
+  border-left: 3px solid ${({ theme }) => theme.colors.accent};
+  padding-left: 1.5rem;
 `;
 
-// We style the Link component from react-router-dom as a Button
-const StyledLinkButton = styled(Link)`
-  background: transparent;
-  border: 2px solid ${({ theme }) => theme.colors.teal};
-  color: ${({ theme }) => theme.colors.teal};
-  padding: 0.75rem 1.5rem;
-  font-family: ${({ theme }) => theme.fonts.body};
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
+const CtaButton = styled(Link)`
+  padding: 1rem 2.5rem;
+  background-color: ${({ theme }) => theme.colors.text};
+  color: #FFF;
+  font-weight: 600;
+  border-radius: 50px; // Pill shape
   transition: all 0.3s ease;
-
+  
   &:hover {
-    background: ${({ theme }) => theme.colors.teal};
-    color: ${({ theme }) => theme.colors.darkBg};
-    box-shadow: ${({ theme }) => theme.glow};
+    background-color: ${({ theme }) => theme.colors.accent};
+    color: #FFF; // Ensure text stays white
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 51, 255, 0.3);
   }
 `;
 
 const Home = () => {
   return (
     <HeroSection
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <HeroTitle>
-        Onserio Ogeto<span></span>
-      </HeroTitle>
-      <HeroSubtitle>Programmer, Lawyer, Artist.</HeroSubtitle>
-      <StyledLinkButton to="/blog">Explore My Work</StyledLinkButton>
+      <LargeTitle>
+        Legal Mind. <br />
+        <span>Creative Soul.</span>
+      </LargeTitle>
+      
+      <Subtitle>
+        I build bridges between complex legal frameworks and elegant technical solutions. 
+        Programmer, Lawyer, Artist.
+      </Subtitle>
+      
+      <CtaButton to="/portfolio">Explore Selected Work</CtaButton>
     </HeroSection>
   );
 };

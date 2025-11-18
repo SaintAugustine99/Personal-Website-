@@ -2,123 +2,82 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { FaGithub, FaYoutube, FaTwitter } from 'react-icons/fa';
 
 const NavWrapper = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1.5rem 2rem;
-  background: rgba(11, 12, 16, 0.6);
-  backdrop-filter: blur(10px);
+  padding: 2rem 3rem;
   z-index: 1000;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightBg};
-`;
-
-const NavContainer = styled.div`
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.9); // Subtle backdrop
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
 const Logo = styled(NavLink)`
-  font-family: ${({ theme }) => theme.fonts.heading};
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.05em;
   color: ${({ theme }) => theme.colors.text};
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-
+  
   span {
-    color: ${({ theme }) => theme.colors.teal};
+    color: ${({ theme }) => theme.colors.accent};
   }
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.teal};
-    text-shadow: ${({ theme }) => theme.glow};
-  }
-`;
-
-const NavRightWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 3rem; // Space between nav links and social icons
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
+  
+  @media (max-width: 768px) {
+    display: none; /* Implement mobile menu if needed */
+  }
 `;
 
 const StyledNavLink = styled(NavLink)`
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.teal};
-    text-shadow: ${({ theme }) => theme.glow};
-  }
-
-  &.active {
-    color: ${({ theme }) => theme.colors.teal};
-  }
-`;
-
-const SocialLinks = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-`;
-
-const SocialLink = styled.a`
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: 1.25rem; // Make icons a bit bigger
-  transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: ${({ theme }) => theme.colors.accent};
+    transition: width 0.3s ease;
+  }
 
-  &:hover {
-    color: ${({ theme }) => theme.colors.violet};
-    transform: scale(1.1);
-    text-shadow: ${({ theme }) => theme.glowViolet};
+  &:hover::after, &.active::after {
+    width: 100%;
+  }
+  
+  &.active {
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
-
 
 const Navbar = () => {
   return (
     <NavWrapper>
-      <NavContainer>
-        <Logo to="/">
-          Onserio Ogeto<span>.</span>
-        </Logo>
-        
-        <NavRightWrapper>
-          <NavLinks>
-            <StyledNavLink to="/">Home</StyledNavLink>
-            <StyledNavLink to="/about">About</StyledNavLink> {/* <-- ADDED */}
-            <StyledNavLink to="/blog">Blog</StyledNavLink>
-            <StyledNavLink to="/portfolio">Portfolio</StyledNavLink>
-            <StyledNavLink to="/contact">Contact</StyledNavLink>
-          </NavLinks>
-
-          <SocialLinks>
-            <SocialLink href="https://github.com/saintaugustine99" target="_blank" rel="noopener noreferrer">
-              <FaGithub />
-            </SocialLink>
-            <SocialLink href="https://youtube.com" target="_blank" rel="noopener noreferrer">
-              <FaYoutube />
-            </SocialLink>
-            <SocialLink href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <FaTwitter />
-            </SocialLink>
-          </SocialLinks>
-        </NavRightWrapper>
-
-      </NavContainer>
+      <Logo to="/">
+        OO<span>.</span>
+      </Logo>
+      <NavLinks>
+        <StyledNavLink to="/">Index</StyledNavLink>
+        <StyledNavLink to="/about">Narrative</StyledNavLink>
+        <StyledNavLink to="/portfolio">Work</StyledNavLink>
+        <StyledNavLink to="/blog">Journal</StyledNavLink>
+        <StyledNavLink to="/contact">Connect</StyledNavLink>
+      </NavLinks>
     </NavWrapper>
   );
 };

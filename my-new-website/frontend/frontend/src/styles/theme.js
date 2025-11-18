@@ -1,23 +1,27 @@
+// src/styles/theme.js
 export const theme = {
   colors: {
-    darkBg: '#0B0C10',
-    lightBg: '#1F2833',
-    teal: '#66FCF1',
-    violet: '#B497F2',
+    // Base Colors
+    mainBg: '#FFFFFF',      // Pure white expanse
+    secondaryBg: '#F8F9FA', // Very subtle gray for sections/cards
     
-    // --- BEFORE ---
-    // text: '#E0E0E0',
-    // textSecondary: '#A8A8A8',
-
-    // --- AFTER (Sharper) ---
-    text: '#FFFFFF', // Pure white for titles and main text
-    textSecondary: '#ffffffff', // A much lighter gray for body text
-
+    // Typography
+    text: '#111111',        // Almost black for strong contrast
+    textSecondary: '#666666', // Muted gray for body text
+    
+    // The "Vibrance" - Electric Blue
+    accent: '#0033FF',      
+    
+    // Borders/Lines
+    border: '#E5E5E5',
   },
   fonts: {
-    heading: "'Playfair Display', serif",
+    // We will use Inter for everything to keep it clean, 
+    // but play with weights (800 vs 300) for contrast.
+    heading: "'Inter', sans-serif",
     body: "'Inter', sans-serif",
   },
-  glow: '0 0 8px #66FCF1, 0 0 12px #66FCF1, 0 0 16px #66FCF1',
-  glowViolet: '0 0 8px #522ba5ff, 0 0 12px #351b6eff',
+  // Minimalist shadows instead of glows
+  shadow: '0 10px 30px -10px rgba(0, 0, 0, 0.1)',
+  transition: '0.4s cubic-bezier(0.16, 1, 0.3, 1)', // Smooth, sophisticated easing
 };
