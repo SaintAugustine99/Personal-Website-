@@ -2,19 +2,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
-import { ThemeProvider } from 'styled-components';
-import { GlobalStyles } from './styles/GlobalStyles.js';
-import { theme } from './styles/theme.js';
 import App from './App.jsx';
 import './index.css';
+
+// We removed ThemeProvider, GlobalStyles, and theme from here 
+// because App.jsx now handles them.
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <App />
-      </ThemeProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>,
 );
