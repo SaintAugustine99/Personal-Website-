@@ -1,4 +1,3 @@
-// src/styles/GlobalStyles.js
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
@@ -16,8 +15,28 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   body {
+    /* --- BACKGROUND CONFIGURATION --- */
     background-color: ${({ theme }) => theme.colors.mainBg};
     color: ${({ theme }) => theme.colors.text};
+    
+    /* Use the image from the public folder */
+    background-image: url('/bg-texture.jpg'); 
+    
+    /* Cover: Ensures no empty space 
+       Fixed: Creates a parallax effect (lines stay still while you scroll)
+    */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
+    /* Overlay: Adds a black tint over the image so text pops.
+       Adjust the 0.85 value to make lines brighter (lower) or darker (higher)
+    */
+    background-blend-mode: overlay;
+    background-color: rgba(0, 0, 0, 0.7); 
+    /* ------------------------------- */
+
     font-family: ${({ theme }) => theme.fonts.body};
     line-height: 1.7;
     overflow-x: hidden;
@@ -26,10 +45,10 @@ export const GlobalStyles = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.fonts.heading};
-    font-weight: 800; /* Strong, distinctive weight */
+    font-weight: 800; 
     color: ${({ theme }) => theme.colors.text};
     line-height: 1.1;
-    letter-spacing: -0.03em; /* Tight tracking for modern feel */
+    letter-spacing: -0.03em; 
     margin-bottom: 1.5rem;
   }
 
@@ -39,7 +58,8 @@ export const GlobalStyles = createGlobalStyle`
     transition: color ${({ theme }) => theme.transition};
     
     &:hover {
-      color: ${({ theme }) => theme.colors.accent};
+      color: ${({ theme }) => theme.colors.teal}; /* Updated to Teal */
+      text-shadow: ${({ theme }) => theme.colors.glow};
     }
   }
 
@@ -47,12 +67,11 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.colors.textSecondary};
     font-weight: 300;
     margin-bottom: 1.5rem;
-    max-width: 65ch; /* Optimal reading length */
+    max-width: 65ch; 
   }
   
-  /* Utility: Selection color */
   ::selection {
-    background: ${({ theme }) => theme.colors.accent};
-    color: #FFF;
+    background: ${({ theme }) => theme.colors.teal};
+    color: #000;
   }
 `;

@@ -25,11 +25,9 @@ export const Button = styled.button`
 `;
 
 export const Card = styled(motion.div)`
-  background: rgba(31, 40, 51, 0.3);
-  border: 1px solid ${({ theme }) => theme.colors.lightBg};
-  border-radius: 8px;
-  padding: 1.5rem;
-  backdrop-filter: blur(5px);
+  background: rgba(20, 20, 20, 0.6); // Dark semi-transparent
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  backdrop-filter: blur(12px);       // Strong blur for readability
   transition: all 0.3s ease;
 
   &:hover {

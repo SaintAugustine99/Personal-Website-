@@ -13,8 +13,8 @@ const NavWrapper = styled.nav`
   left: 0;
   width: 100%;
   z-index: 100;
-  background: rgba(10, 10, 10, 0.5); /* Semi-transparent */
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.5); // Dark, transparent
+  backdrop-filter: blur(10px);     // Blur the lines behind the nav
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
