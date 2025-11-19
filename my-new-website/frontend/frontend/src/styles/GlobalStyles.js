@@ -15,32 +15,17 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    /* --- BACKGROUND CONFIGURATION --- */
     background-color: ${({ theme }) => theme.colors.mainBg};
     color: ${({ theme }) => theme.colors.text};
     
-    /* Use the image from the public folder */
-    background-image: url('/bg-texture.jpg'); 
-    
-    /* Cover: Ensures no empty space 
-       Fixed: Creates a parallax effect (lines stay still while you scroll)
-    */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-
-    /* Overlay: Adds a black tint over the image so text pops.
-       Adjust the 0.85 value to make lines brighter (lower) or darker (higher)
-    */
-    background-blend-mode: overlay;
-    background-color: rgba(0, 0, 0, 0.7); 
-    /* ------------------------------- */
+    /* REMOVED: background-image and blend modes */
+    /* The Topography component now handles the background */
 
     font-family: ${({ theme }) => theme.fonts.body};
     line-height: 1.7;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -58,7 +43,7 @@ export const GlobalStyles = createGlobalStyle`
     transition: color ${({ theme }) => theme.transition};
     
     &:hover {
-      color: ${({ theme }) => theme.colors.teal}; /* Updated to Teal */
+      color: ${({ theme }) => theme.colors.teal};
       text-shadow: ${({ theme }) => theme.colors.glow};
     }
   }

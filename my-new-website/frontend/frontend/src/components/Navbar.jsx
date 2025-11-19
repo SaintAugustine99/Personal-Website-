@@ -13,9 +13,14 @@ const NavWrapper = styled.nav`
   left: 0;
   width: 100%;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.5); // Dark, transparent
-  backdrop-filter: blur(10px);     // Blur the lines behind the nav
+  
+  /* --- CHANGED: Use theme variable instead of hardcoded black --- */
+  background: ${({ theme }) => theme.colors.navBg}; 
+  /* ----------------------------------------------------------- */
+
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 `;
 
 const Logo = styled(Link)`
@@ -35,7 +40,7 @@ const NavLinks = styled.div`
   gap: 2rem;
 
   @media (max-width: 768px) {
-    display: none; /* Hide on mobile for now */
+    display: none; 
   }
 `;
 
@@ -54,7 +59,6 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-// The Toggle Button
 const ThemeToggle = styled.button`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
