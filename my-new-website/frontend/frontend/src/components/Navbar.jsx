@@ -13,11 +13,7 @@ const NavWrapper = styled.nav`
   left: 0;
   width: 100%;
   z-index: 100;
-  
-  /* --- CHANGED: Use theme variable instead of hardcoded black --- */
   background: ${({ theme }) => theme.colors.navBg}; 
-  /* ----------------------------------------------------------- */
-
   backdrop-filter: blur(10px);
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   transition: background-color 0.4s ease, border-color 0.4s ease;
@@ -41,6 +37,7 @@ const NavLinks = styled.div`
 
   @media (max-width: 768px) {
     display: none; 
+    // Note: Mobile menu implementation would go here
   }
 `;
 
@@ -49,6 +46,7 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
+  font-size: 0.95rem;
 
   &:hover, &.active {
     color: ${({ theme }) => theme.colors.text};
@@ -56,6 +54,19 @@ const StyledNavLink = styled(NavLink)`
   
   &.active {
     color: ${({ theme }) => theme.colors.accent};
+    // Optional: Add an underline indicator for active state
+    position: relative;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: ${({ theme }) => theme.colors.accent};
+        border-radius: 2px;
+    }
   }
 `;
 
@@ -87,6 +98,8 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
         <StyledNavLink to="/">Index</StyledNavLink>
         <StyledNavLink to="/about">About</StyledNavLink>
         <StyledNavLink to="/blog">Blog</StyledNavLink>
+        {/* New Experiments Link */}
+        <StyledNavLink to="/experiments">Lab</StyledNavLink>
         <StyledNavLink to="/portfolio">Portfolio</StyledNavLink>
         <StyledNavLink to="/contact">Connect</StyledNavLink>
         

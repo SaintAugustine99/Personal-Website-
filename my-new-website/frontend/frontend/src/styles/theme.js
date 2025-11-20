@@ -55,8 +55,8 @@ export const darkTheme = {
     
     // Accents
     accent: '#66FCF1',
-    teal: '#66FCF1',
-    violet: '#45a29e',
+    teal: '#0326c5ff',
+    violet: '#053cd1ff',
     
     // UI
     border: 'rgba(102, 252, 241, 0.2)',
