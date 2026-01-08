@@ -5,70 +5,69 @@ const baseStyles = {
     heading: "'Inter', sans-serif",
     body: "'Inter', sans-serif",
   },
-  shadow: '0 10px 30px -10px rgba(0, 0, 0, 0.1)',
-  transition: '0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+  // Pixel UI uses softer, larger shadows
+  shadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+  // Smooth, slightly bouncy transitions
+  transition: '0.3s cubic-bezier(0.2, 0.0, 0.2, 1)',
 };
 
 export const lightTheme = {
   ...baseStyles,
   colors: {
-    // Layout
-    mainBg: '#FFFFFF',
-    secondaryBg: '#F8F9FA',
-    navBg: 'rgba(255, 255, 255, 0.8)', // <-- FIXES GREY HEADER (White Glass)
-    
-    // Text
-    text: '#111111',
-    textSecondary: '#666666',
-    
-    // Accents
-    accent: '#0033FF',
-    teal: '#008080',
-    violet: '#7209B7',
-    
-    // UI
-    border: '#E5E5E5',
-    
-    // Topography (The "Sketch" Look)
-    contour: 'rgba(0, 0, 0, 0.6)',      
-    brushShadow: 'rgba(0, 0, 0, 0.1)',
-    
-    // Compatibility keys (Prevents crashes)
+    // Layout - A warm, cream/yellow tinted off-white (The light on the child's skin)
+    mainBg: '#FFFCF3',
+    secondaryBg: '#F0EAD6', // Eggshell/parchment
+
+    // The "Glass" Navbar - slightly frosted yellow-white
+    navBg: 'rgba(255, 252, 243, 0.85)',
+
+    // Text - Sharp, Bold Black (The background shadows of the painting)
+    text: '#0D0D0D',
+    textSecondary: '#4A4843', // Warm charcoal
+
+    // Accents - Extracted from the Sunflower
+    accent: '#E6AA00', // Deep Sunflower Gold
+    teal: '#556B2F',   // Olive Green (The stem) - replacing your old teal
+    violet: '#8B4513', // Saddle Brown (The wood/skin tone) - replacing violet
+
+    // UI Elements
+    border: 'rgba(13, 13, 13, 0.1)', // Subtle black borders
+
+    // Topography Animation Colors
+    contour: 'rgba(13, 13, 13, 0.15)', // Faint ink lines like a sketch
+    brushShadow: 'rgba(230, 170, 0, 0.1)', // Very faint yellow wash
+
+    // Compatibility keys
     lightBg: '#FFFFFF',
-    darkBg: '#111111',
-    glow: '0 0 10px rgba(0, 51, 255, 0.3)',
-    glowViolet: '0 0 10px rgba(114, 9, 183, 0.3)',
+    darkBg: '#1A1915', // Warm dark
+    glow: '0 0 15px rgba(230, 170, 0, 0.4)', // Gold glow
+    glowViolet: '0 0 15px rgba(139, 69, 19, 0.3)',
   },
 };
 
+// Dark Mode to match this aesthetic (Deep Warmth)
 export const darkTheme = {
   ...baseStyles,
   colors: {
-    // Layout
-    mainBg: '#0b0c10',      
-    secondaryBg: 'rgba(31, 40, 51, 0.5)', 
-    navBg: 'rgba(11, 12, 16, 0.8)', // <-- FIXES GREY HEADER (Dark Glass)
-    
-    // Text
-    text: '#FFFFFF',
-    textSecondary: '#c5c6c7',
-    
-    // Accents
-    accent: '#66FCF1',
-    teal: '#0326c5ff',
-    violet: '#053cd1ff',
-    
-    // UI
-    border: 'rgba(102, 252, 241, 0.2)',
-    
-    // Topography (The "Cyber" Look)
-    contour: 'rgba(255, 255, 255, 0.9)',    
-    brushShadow: 'rgba(255, 255, 255, 0.15)',
-    
-    // Compatibility keys
+    mainBg: '#1A1915', // Dark Warm Brown/Black
+    secondaryBg: '#2C2A25',
+    navBg: 'rgba(26, 25, 21, 0.85)',
+
+    text: '#FDFBF7', // Cream text
+    textSecondary: '#B0ADA5',
+
+    accent: '#FFC845', // Lighter Sunflower for dark mode
+    teal: '#8F9F73',   // Light Olive
+    violet: '#C68E17',
+
+    border: 'rgba(255, 255, 255, 0.1)',
+
+    contour: 'rgba(255, 200, 69, 0.15)',
+    brushShadow: 'rgba(0, 0, 0, 0.2)',
+
     lightBg: 'rgba(255, 255, 255, 0.05)',
-    darkBg: '#0b0c10',
-    glow: '0 0 10px rgba(102, 252, 241, 0.4)',
-    glowViolet: '0 0 10px rgba(69, 162, 158, 0.4)',
+    darkBg: '#1A1915',
+    glow: '0 0 20px rgba(255, 200, 69, 0.2)',
+    glowViolet: '0 0 20px rgba(198, 142, 23, 0.2)',
   },
 };

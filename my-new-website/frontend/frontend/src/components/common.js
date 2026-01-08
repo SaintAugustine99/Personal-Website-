@@ -1,21 +1,22 @@
+// src/components/common.js
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 export const Button = styled.button`
-  background: transparent;
-  border: 2px solid ${({ theme }) => theme.colors.teal};
-  color: ${({ theme }) => theme.colors.teal};
-  padding: 0.75rem 1.5rem;
+  background: ${({ theme }) => theme.colors.accent}; /* Solid Sunflower fill */
+  border: none;
+  color: #000; /* Black text on Yellow button */
+  padding: 1rem 2rem;
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
+  border-radius: 50px; /* Full Pill Shape */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.teal};
-    color: ${({ theme }) => theme.colors.darkBg};
-    box-shadow: ${({ theme }) => theme.glow};
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230, 170, 0, 0.4);
   }
 
   &:disabled {
@@ -25,34 +26,37 @@ export const Button = styled.button`
 `;
 
 export const Card = styled(motion.div)`
-  background: rgba(20, 20, 20, 0.6); // Dark semi-transparent
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  backdrop-filter: blur(12px);       // Strong blur for readability
+  background: ${({ theme }) => theme.colors.secondaryBg}; 
+  /* In Light mode, this is now a subtle eggshell, distinct from the cream background */
+  
+  border: 1px solid transparent;
+  border-radius: 28px; /* Pixel-style large rounded corners */
+  overflow: hidden;
   transition: all 0.3s ease;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.teal};
-    box-shadow: 0 4px 20px rgba(102, 252, 241, 0.1);
-    transform: translateY(-5px);
+    background: ${({ theme }) => theme.colors.mainBg};
+    border-color: ${({ theme }) => theme.colors.accent};
+    box-shadow: ${({ theme }) => theme.shadow};
+    transform: scale(1.01);
   }
 `;
 
 export const Input = styled.input`
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: ${({ theme }) => theme.colors.lightBg};
-  border: 1px solid transparent;
-  border-radius: 4px;
+  padding: 1rem 1.5rem;
+  background: ${({ theme }) => theme.colors.navBg};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: 16px; /* Soft edges */
   color: ${({ theme }) => theme.colors.text};
   font-family: ${({ theme }) => theme.fonts.body};
   font-size: 1rem;
   margin-bottom: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease;
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.colors.violet};
-    box-shadow: ${({ theme }) => theme.glowViolet};
+    border-color: ${({ theme }) => theme.colors.accent};
   }
 `;
 

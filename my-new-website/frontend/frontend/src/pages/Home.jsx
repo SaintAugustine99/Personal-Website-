@@ -9,68 +9,90 @@ const HeroSection = styled(motion.section)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   max-width: 1000px;
   margin: 0 auto;
 `;
 
-const LargeTitle = styled.h1`
-  font-size: clamp(3rem, 8vw, 6rem); /* Responsive massive text */
-  font-weight: 800;
-  line-height: 0.95;
-  margin-bottom: 2rem;
+const NameTitle = styled.h1`
+  font-size: clamp(3.5rem, 10vw, 7rem); 
+  font-weight: 900; 
+  line-height: 0.9;
+  margin-bottom: 1.5rem;
   color: ${({ theme }) => theme.colors.text};
+  letter-spacing: -0.04em;
+`;
+
+const RoleList = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  font-family: ${({ theme }) => theme.fonts.body};
+  font-size: 1.1rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-weight: 500;
   
   span {
-    color: transparent;
-    -webkit-text-stroke: 2px ${({ theme }) => theme.colors.accent};
-    display: block; /* Stack the text */
+    position: relative;
+    
+    &:not(:last-child)::after {
+      content: '•';
+      position: absolute;
+      right: -1rem;
+      color: ${({ theme }) => theme.colors.accent};
+    }
   }
 `;
 
 const Subtitle = styled.p`
   font-size: 1.25rem;
-  color: ${({ theme }) => theme.colors.textSecondary};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 3rem;
-  max-width: 500px;
-  border-left: 3px solid ${({ theme }) => theme.colors.accent};
-  padding-left: 1.5rem;
+  max-width: 550px;
+  line-height: 1.6;
+  font-weight: 400;
 `;
 
 const CtaButton = styled(Link)`
   padding: 1rem 2.5rem;
   background-color: ${({ theme }) => theme.colors.text};
-  color: #FFF;
-  font-weight: 600;
-  border-radius: 50px; // Pill shape
+  color: ${({ theme }) => theme.colors.mainBg}; /* Inverted contrast */
+  font-weight: 700;
+  border-radius: 50px;
   transition: all 0.3s ease;
   
   &:hover {
     background-color: ${({ theme }) => theme.colors.accent};
-    color: #FFF; // Ensure text stays white
+    color: #000;
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 51, 255, 0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   }
 `;
 
 const Home = () => {
   return (
     <HeroSection
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <LargeTitle>
-        Legal Mind. <br />
-        <span>Creative Soul.</span>
-      </LargeTitle>
-      
+      <NameTitle>
+        Onserio Ogeto.
+      </NameTitle>
+
+      <RoleList>
+        <span>Law</span>
+        <span>Code</span>
+        <span>Art</span>
+      </RoleList>
+
       <Subtitle>
-        I build bridges between complex legal frameworks and elegant technical solutions. 
-        Programmer, Lawyer, Artist.
+        I build logic systems for the digital age.
+        Exploring the friction between rigid laws and fluid code.
       </Subtitle>
-      
-      <CtaButton to="/portfolio">Explore Selected Work</CtaButton>
+
+      <CtaButton to="/portfolio">View Selected Work</CtaButton>
     </HeroSection>
   );
 };

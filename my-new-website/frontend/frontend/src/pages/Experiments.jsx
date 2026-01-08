@@ -3,9 +3,13 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import Construction from '../components/Construction';
 
 // Use the same API base as your other pages
 const API_URL = "http://127.0.0.1:8000";
+
+// Set this to TRUE to force the construction page
+const FORCE_CONSTRUCTION_MODE = true;
 
 const PageContainer = styled(motion.div)`
   max-width: 1200px;
@@ -66,11 +70,11 @@ const StatusBadge = styled.span`
   top: 1rem;
   right: 1rem;
   padding: 0.3rem 0.8rem;
-  background: ${({ theme, status }) => 
+  background: ${({ theme, status }) =>
     status === 'active' ? 'rgba(102, 252, 241, 0.2)' : 'rgba(100, 100, 100, 0.3)'};
-  color: ${({ theme, status }) => 
+  color: ${({ theme, status }) =>
     status === 'active' ? theme.colors.teal : theme.colors.textSecondary};
-  border: 1px solid ${({ theme, status }) => 
+  border: 1px solid ${({ theme, status }) =>
     status === 'active' ? theme.colors.teal : 'transparent'};
   border-radius: 20px;
   font-size: 0.75rem;
@@ -227,12 +231,12 @@ const Experiments = () => {
       sandbox_url: "https://codepen.io/jakob-e/embed/xbXmLV?default-tab=result" // Example embed
     },
     {
-        id: 2,
-        title: "Three.js Physics",
-        description: "Testing rigid body physics in a browser environment.",
-        thumbnail: null,
-        status: "active",
-        sandbox_url: ""
+      id: 2,
+      title: "Three.js Physics",
+      description: "Testing rigid body physics in a browser environment.",
+      thumbnail: null,
+      status: "active",
+      sandbox_url: ""
     }
   ];
 
@@ -249,6 +253,19 @@ const Experiments = () => {
       });
   }, []);
 
+  // Show construction page if forced or no experiments
+  if (FORCE_CONSTRUCTION_MODE || experiments.length === 0) {
+    return (
+      <PageContainer
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <Construction />
+      </PageContainer>
+    );
+  }
+
   return (
     <PageContainer
       initial={{ opacity: 0 }}
@@ -264,7 +281,7 @@ const Experiments = () => {
           The <span>Lab</span>
         </motion.h1>
         <p>
-          A collection of active experiments, code snippets, and unfinished symphonies. 
+          A collection of active experiments, code snippets, and unfinished symphonies.
           Click on a card to interact or view details.
         </p>
       </Header>
@@ -281,9 +298,9 @@ const Experiments = () => {
           >
             <StatusBadge status={exp.status}>{exp.status}</StatusBadge>
             <ThumbnailWrapper>
-              <img 
-                src={exp.thumbnail || "https://via.placeholder.com/600x400/111/333?text=Experiment"} 
-                alt={exp.title} 
+              <img
+                src={exp.thumbnail || "https://via.placeholder.com/600x400/111/333?text=Experiment"}
+                alt={exp.title}
               />
             </ThumbnailWrapper>
             <CardContent>
@@ -313,22 +330,22 @@ const Experiments = () => {
                 <h2>{selectedExperiment.title}</h2>
                 <CloseButton onClick={() => setSelectedExperiment(null)}>×</CloseButton>
               </ModalHeader>
-              
+
               <ModalBody>
                 {selectedExperiment.sandbox_url ? (
-                  <iframe 
-                    src={selectedExperiment.sandbox_url} 
-                    title={selectedExperiment.title} 
+                  <iframe
+                    src={selectedExperiment.sandbox_url}
+                    title={selectedExperiment.title}
                     allowFullScreen
                   />
                 ) : (
-                  <img 
-                    src={selectedExperiment.thumbnail || "https://via.placeholder.com/600x400"} 
-                    alt={selectedExperiment.title} 
+                  <img
+                    src={selectedExperiment.thumbnail || "https://via.placeholder.com/600x400"}
+                    alt={selectedExperiment.title}
                   />
                 )}
               </ModalBody>
-              
+
               <ViewToggle>
                 {selectedExperiment.github_url && (
                   <ActionButton href={selectedExperiment.github_url} target="_blank">
