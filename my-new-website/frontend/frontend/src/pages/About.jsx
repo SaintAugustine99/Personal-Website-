@@ -142,21 +142,12 @@ const About = () => {
             I am a multidisciplinary researcher, interested in Philosophy, The Sciences and The Arts". I have formal training in The Laws, Software Engineering and Cybersecurity.
           </p>
           <p>
-            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <i>Others</i>
+            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <i>Others</i>.
           </p>
           <p>
-            when I am not programming, experimenting, or drawing/writing/reading,  you can find me hiking, sleeping, cycling, running. Feel free
+            When I am not programming, experimenting, or drawing/writing/reading,  you can find me hiking, sleeping, cycling, running. Feel free
             to <Link to="/contact">get in touch</Link>!
           </p>
-
-          <SkillsContainer>
-            <h2>My Toolkit</h2>
-            <SkillsGrid>
-              {skills.map((skill, index) => (
-                <SkillBadge key={index}>{skill}</SkillBadge>
-              ))}
-            </SkillsGrid>
-          </SkillsContainer>
 
         </TextSection>
       </AboutContent>
