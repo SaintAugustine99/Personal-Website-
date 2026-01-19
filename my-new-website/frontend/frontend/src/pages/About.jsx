@@ -142,7 +142,7 @@ const About = () => {
             I am a multidisciplinary researcher, interested in Philosophy, The Sciences and The Arts". I have formal training in The Laws, Software Engineering and Cybersecurity.
           </p>
           <p>
-            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <i>Others</i>.
+            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <i>Others</i>. Currently building competence in AI governance research work.
           </p>
           <p>
             When I am not programming, experimenting, or drawing/writing/reading,  you can find me hiking, sleeping, cycling, running. Feel free
