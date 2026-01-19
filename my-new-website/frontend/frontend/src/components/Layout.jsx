@@ -16,6 +16,10 @@ const MainContent = styled.main`
   /* IMPORTANT: These lines ensure your text sits ABOVE the background canvas */
   position: relative; 
   z-index: 1;         
+
+  @media (max-width: 768px) {
+    padding: 100px 1.5rem 3rem;
+  }
 `;
 
 // We destructure the props passed from App.jsx here
@@ -23,11 +27,11 @@ const Layout = ({ toggleTheme, isDarkMode }) => {
   return (
     <>
       {/* The background canvas (z-index: -1 inside the component) */}
-      <Topography /> 
-      
+      <Topography />
+
       {/* Pass the toggle functionality down to the Navbar */}
       <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      
+
       <MainContent>
         <Outlet />
       </MainContent>

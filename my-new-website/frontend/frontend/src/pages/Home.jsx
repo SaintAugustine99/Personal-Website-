@@ -16,12 +16,16 @@ const HeroSection = styled(motion.section)`
 `;
 
 const NameTitle = styled.h1`
-  font-size: clamp(3.5rem, 10vw, 7rem); 
+  font-size: clamp(3rem, 10vw, 7rem); 
   font-weight: 900; 
   line-height: 0.9;
   margin-bottom: 1.5rem;
   color: ${({ theme }) => theme.colors.text};
   letter-spacing: -0.04em;
+
+  @media (max-width: 768px) {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
 `;
 
 const RoleList = styled.div`
