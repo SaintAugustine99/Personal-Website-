@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 // --- Placeholder content ---
 // TODO: Replace this with your actual image
-const PROFILE_IMAGE_URL = "https://via.placeholder.com/350"; 
+const PROFILE_IMAGE_URL = "https://via.placeholder.com/350";
 // TODO: Replace this with a link to your resume
 const RESUME_URL = "/resume.pdf"; // Assuming you'll add resume.pdf to your /public folder
 
@@ -139,21 +139,13 @@ const About = () => {
         <TextSection>
           <h2>Who I Am</h2>
           <p>
-            I'm Onserio Ogeto, a multi-disciplinary professional with a passion for 
-            technology, law, and creative expression. My journey has taken me from 
-            the structured world of law to the dynamic, ever-evolving realm of 
-            software engineering and cybersecurity. My passion however, is in the Arts. 
+            I am a multidisciplinary researcher, interested in Philosophy, The Sciences and The Arts". I have formal training in The Laws, Software Engineering and Cybersecurity.
           </p>
           <p>
-            My unique background allows me to build bridges between complex technical 
-            systems and the human-centric legal frameworks that govern them. I'm 
-            driven by a curiosity to understand how things work, a desire to build 
-            tools that solve real-world problems, and a commitment to ensuring 
-            technology is developed ethically and responsibly.
+            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <i>Others</i>
           </p>
           <p>
-            When I'm not coding or diving into legal texts, you can find me 
-            exploring digital art or working on my next project. Feel free 
+            when I am not programming, experimenting, or drawing/writing/reading,  you can find me hiking, sleeping, cycling, running. Feel free
             to <Link to="/contact">get in touch</Link>!
           </p>
 

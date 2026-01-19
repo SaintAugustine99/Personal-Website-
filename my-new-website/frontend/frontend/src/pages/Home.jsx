@@ -86,14 +86,13 @@ const Home = () => {
       </NameTitle>
 
       <RoleList>
-        <span>Law</span>
-        <span>Code</span>
+        <span>Design</span>
+        <span>Philosophy</span>
         <span>Art</span>
       </RoleList>
 
       <Subtitle>
-        I build logic systems for the digital age.
-        Exploring the friction between rigid laws and fluid code.
+        Interested in the manifold. Multidisciplinary.
       </Subtitle>
 
       <CtaButton to="/portfolio">View Selected Work</CtaButton>
