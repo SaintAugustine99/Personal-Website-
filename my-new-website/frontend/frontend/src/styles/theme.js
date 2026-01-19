@@ -2,8 +2,8 @@
 
 const baseStyles = {
   fonts: {
-    heading: "'Inter', sans-serif",
-    body: "'Inter', sans-serif",
+    heading: "'Book Antiqua', 'Palatino Linotype', 'Palatino', serif",
+    body: "'Book Antiqua', 'Palatino Linotype', 'Palatino', serif",
   },
   // Pixel UI uses softer, larger shadows
   shadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
