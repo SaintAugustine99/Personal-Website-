@@ -86,7 +86,7 @@ const Home = () => {
       </NameTitle>
 
       <RoleList>
-        <span>Design</span>
+        <span>Research</span>
         <span>Philosophy</span>
         <span>Art</span>
       </RoleList>
