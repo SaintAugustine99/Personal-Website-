@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom';
 // --- Placeholder content ---
 // TODO: Replace this with your actual image
 const PROFILE_IMAGE_URL = "https://via.placeholder.com/350";
-// TODO: Replace this with a link to your resume
-const RESUME_URL = "/resume.pdf"; // Assuming you'll add resume.pdf to your /public folder
 
 const skills = [
   'Python', 'Django', 'JavaScript', 'React',
@@ -58,26 +56,6 @@ const ProfileImage = styled.img`
   border: 2px solid ${({ theme }) => theme.colors.lightBg};
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   margin-bottom: 1.5rem;
-`;
-
-const StyledLinkButton = styled.a`
-  display: inline-block;
-  background: transparent;
-  border: 2px solid ${({ theme }) => theme.colors.teal};
-  color: ${({ theme }) => theme.colors.teal};
-  padding: 0.75rem 1.5rem;
-  font-family: ${({ theme }) => theme.fonts.body};
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.teal};
-    color: ${({ theme }) => theme.colors.darkBg};
-    box-shadow: ${({ theme }) => theme.glow};
-  }
 `;
 
 const TextSection = styled.div`
@@ -131,9 +109,6 @@ const About = () => {
       <AboutContent>
         <ProfileSection>
           <ProfileImage src={PROFILE_IMAGE_URL} alt="Onserio Ogeto" />
-          <StyledLinkButton href={RESUME_URL} target="_blank" rel="noopener noreferrer">
-            Download Resume
-          </StyledLinkButton>
         </ProfileSection>
 
         <TextSection>
