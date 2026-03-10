@@ -23,6 +23,11 @@ const HorizontalFlow = styled(motion.div)`
   display: flex;
   gap: 4rem;
   padding: 0 10vw;
+
+  @media (max-width: 768px) {
+    gap: 2rem;
+    padding: 0 5vw;
+  }
 `;
 
 const ProjectCard = styled.a`
@@ -42,6 +47,11 @@ const ProjectCard = styled.a`
   &:hover img {
     filter: grayscale(0%) blur(0px);
     transform: scale(1.03);
+  }
+
+  @media (max-width: 768px) {
+    width: 85vw;
+    height: 60vh;
   }
 `;
 
@@ -108,6 +118,10 @@ const BackgroundMarquee = styled.div`
   z-index: 0;
   text-transform: uppercase;
   letter-spacing: -0.05em;
+
+  @media (max-width: 768px) {
+    font-size: 40vw;
+  }
 `;
 
 const HorizontalGallery = () => {

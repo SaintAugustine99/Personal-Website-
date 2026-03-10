@@ -9,6 +9,7 @@ const API_URL = "http://127.0.0.1:8000"; // Django backend
 const ContactContainer = styled(motion.div)`
   max-width: 600px;
   margin: 0 auto;
+  padding: 0 1.5rem;
   
   h1 {
     font-size: 3rem;

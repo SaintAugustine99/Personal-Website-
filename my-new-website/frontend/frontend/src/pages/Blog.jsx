@@ -155,6 +155,10 @@ const ReadingContent = styled.article`
   margin: 0 auto;
   padding: 4rem 2rem 6rem 2rem;
 
+  @media (max-width: 768px) {
+    padding: 2.5rem 1.5rem 4rem 1.5rem;
+  }
+
   h1 {
     font-size: clamp(2rem, 5vw, 3.5rem);
     margin-bottom: 1.5rem;
