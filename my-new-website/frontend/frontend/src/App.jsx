@@ -1,41 +1,61 @@
-// src/App.jsx
 import React, { useState } from 'react';
-import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from 'styled-components';
 import { lightTheme, darkTheme } from './styles/theme.js';
 import { GlobalStyles } from './styles/GlobalStyles.js';
+import styled from 'styled-components';
 
-import Layout from './components/Layout.jsx';
+import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
+import Topography from './components/Topography.jsx';
+
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
-import Blog from './pages/Blog.jsx';
-import BlogDetail from './pages/BlogDetail.jsx';
-import Contact from './pages/Contact.jsx';
 import Portfolio from './pages/Portfolio.jsx';
-// Import the new page
 import Experiments from './pages/Experiments.jsx';
+import Blog from './pages/Blog.jsx';
+import Contact from './pages/Contact.jsx';
+
+import BranchingSection from './components/BranchingSection.jsx';
+
+const MainFlow = styled.main`
+  width: 100%;
+  max-width: 1400px; 
+  margin: 0 auto;
+  position: relative; 
+  z-index: 1;         
+`;
+
+// A wrapper to give each branch/section room to breathe
+const Section = styled.section`
+  min-height: 100vh;
+  padding: 120px 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Let's default to dark for that artistic contrast
 
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
+  const toggleTheme = () => setIsDarkMode(prev => !prev);
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <GlobalStyles />
-      <Routes>
-        <Route path="/" element={<Layout toggleTheme={toggleTheme} isDarkMode={isDarkMode} />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="blog" element={<Blog />} />
-          <Route path="blog/:slug" element={<BlogDetail />} />
-          <Route path="experiments" element={<Experiments />} />
-          <Route path="portfolio" element={<Portfolio />} />
-          <Route path="contact" element={<Contact />} />
-        </Route>
-      </Routes>
+      <Topography />
+      <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
+      
+      <MainFlow>
+        <Section id="home"><Home /></Section>
+        <Section id="about"><About /></Section>
+        <BranchingSection />
+        <Section id="portfolio"><Portfolio /></Section>
+        <Section id="experiments"><Experiments /></Section>
+        <Section id="blog"><Blog /></Section>
+        <Section id="contact"><Contact /></Section>
+      </MainFlow>
+      
+      <Footer />
     </ThemeProvider>
   );
 }

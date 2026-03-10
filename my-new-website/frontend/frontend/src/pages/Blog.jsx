@@ -142,6 +142,9 @@ const Blog = () => {
                 <PostTitle>{post.title}</PostTitle>
                 <PostMeta>
                   {formatDate(post.created)}
+                  {post.updated && post.updated.slice(0, 10) !== post.created.slice(0, 10) && (
+                    <> &middot; Updated {formatDate(post.updated)}</>
+                  )}
                 </PostMeta>
                 <PostExcerpt>{post.excerpt}</PostExcerpt>
               </PostContentWrapper>

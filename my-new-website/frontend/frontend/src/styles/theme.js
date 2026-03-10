@@ -2,13 +2,12 @@
 
 const baseStyles = {
   fonts: {
-    heading: "'Book Antiqua', 'Palatino Linotype', 'Palatino', serif",
-    body: "'Book Antiqua', 'Palatino Linotype', 'Palatino', serif",
+    heading: "'Courier Prime', monospace",
+    body: "'Courier Prime', monospace",
   },
-  // Pixel UI uses softer, larger shadows
-  shadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-  // Smooth, slightly bouncy transitions
-  transition: '0.3s cubic-bezier(0.2, 0.0, 0.2, 1)',
+  // A much softer, more elegant shadow
+  shadow: '0 10px 40px rgba(0, 0, 0, 0.05)', 
+  transition: '0.5s cubic-bezier(0.25, 1, 0.5, 1)', // Slower, breathier transitions
 };
 
 export const lightTheme = {

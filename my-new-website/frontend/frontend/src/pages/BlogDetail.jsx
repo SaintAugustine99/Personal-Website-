@@ -10,25 +10,25 @@ const API_URL = "http://127.0.0.1:8000";
 const PostContainer = styled(motion.div)`
   max-width: 800px;
   margin: 0 auto;
-  padding: 0; 
-  background: ${({ theme }) => theme.colors.navBg}; /* Use the glass background color */
-  backdrop-filter: blur(15px); /* Stronger blur for legibility */
+  padding: 0;
+  background: ${({ theme }) => theme.colors.navBg};
+  backdrop-filter: blur(15px);
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 12px; /* Increased radius for softer look */
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2); /* Deep shadow for depth */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 `;
 
 const PostImage = styled.img`
   width: 100%;
-  height: 400px; /* Taller header image */
+  height: 400px;
   object-fit: cover;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const PostTextWrapper = styled.div`
-  padding: 3rem 4rem; /* More breathing room */
-  
+  padding: 3rem 4rem;
+
   @media (max-width: 768px) {
     padding: 1.5rem;
   }
@@ -54,8 +54,8 @@ const PostMeta = styled.p`
 `;
 
 const PostContent = styled.div`
-  color: ${({ theme }) => theme.colors.text}; /* Main text needs high contrast */
-  font-size: 1.125rem; /* Slightly larger for readability */
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1.125rem;
   line-height: 1.8;
   font-weight: 300;
 
@@ -66,15 +66,15 @@ const PostContent = styled.div`
     font-weight: 700;
     line-height: 1.2;
   }
-  
+
   p {
     margin-bottom: 1.5rem;
-    opacity: 0.9; /* Slight softness to text */
+    opacity: 0.9;
   }
-  
+
   strong {
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.teal}; /* Highlight strong text */
+    color: ${({ theme }) => theme.colors.teal};
   }
 
   a {
@@ -82,21 +82,20 @@ const PostContent = styled.div`
     text-decoration: none;
     border-bottom: 1px solid ${({ theme }) => theme.colors.teal};
     transition: all 0.2s;
-    
+
     &:hover {
       background: ${({ theme }) => theme.colors.teal};
       color: #000;
     }
   }
 
-  /* --- HANDLING INLINE IMAGES --- */
   img {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
     margin: 2rem 0;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    display: block; /* Prevents inline spacing issues */
+    display: block;
   }
 
   pre {
@@ -120,6 +119,106 @@ const PostContent = styled.div`
   }
 `;
 
+const BlockHeading = styled.h2`
+  font-size: 1.8rem;
+  color: ${({ theme }) => theme.colors.text};
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+`;
+
+const BlockFigure = styled.figure`
+  margin: 2rem 0;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: block;
+  }
+
+  figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: ${({ theme }) => theme.colors.textSecondary};
+    text-align: center;
+    font-style: italic;
+  }
+`;
+
+const BlockQuote = styled.blockquote`
+  border-left: 4px solid ${({ theme }) => theme.colors.violet};
+  margin: 2rem 0;
+  font-style: italic;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  background: ${({ theme }) => theme.colors.lightBg};
+  padding: 1rem 1rem 1rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+
+  p {
+    margin-bottom: 0.5rem;
+    &:last-child { margin-bottom: 0; }
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.teal};
+    text-decoration: none;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.teal};
+    transition: all 0.2s;
+    &:hover {
+      background: ${({ theme }) => theme.colors.teal};
+      color: #000;
+    }
+  }
+`;
+
+const UpdatesSection = styled.div`
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid ${({ theme }) => theme.colors.border};
+
+  h3 {
+    font-size: 1.4rem;
+    color: ${({ theme }) => theme.colors.text};
+    margin-bottom: 1.5rem;
+  }
+`;
+
+const Update = styled.div`
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: ${({ theme }) => theme.colors.lightBg};
+  border-radius: 8px;
+  border-left: 3px solid ${({ theme }) => theme.colors.teal};
+
+  p {
+    margin-bottom: 0.5rem;
+    &:last-child { margin-bottom: 0; }
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.teal};
+    text-decoration: none;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.teal};
+    transition: all 0.2s;
+    &:hover {
+      background: ${({ theme }) => theme.colors.teal};
+      color: #000;
+    }
+  }
+`;
+
+const UpdateDate = styled.p`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+`;
+
 const BackLink = styled(Link)`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-decoration: none;
@@ -129,7 +228,7 @@ const BackLink = styled(Link)`
   font-size: 0.9rem;
   font-weight: 600;
   transition: color 0.3s;
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.accent};
     transform: translateX(-5px);
@@ -140,6 +239,32 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: 'numeric', month: 'long', day: 'numeric'
   });
+};
+
+const renderBlock = (block) => {
+  switch (block.block_type) {
+    case 'text':
+      return <PostContent dangerouslySetInnerHTML={{ __html: block.text_html }} />;
+    case 'image':
+      return (
+        <BlockFigure>
+          {block.link_url ? (
+            <a href={block.link_url} target="_blank" rel="noopener noreferrer">
+              <img src={block.image} alt={block.image_alt} />
+            </a>
+          ) : (
+            <img src={block.image} alt={block.image_alt} />
+          )}
+          {block.image_caption && <figcaption>{block.image_caption}</figcaption>}
+        </BlockFigure>
+      );
+    case 'heading':
+      return <BlockHeading>{block.text}</BlockHeading>;
+    case 'quote':
+      return <BlockQuote dangerouslySetInnerHTML={{ __html: block.text_html }} />;
+    default:
+      return null;
+  }
 };
 
 const BlogDetail = () => {
@@ -176,15 +301,29 @@ const BlogDetail = () => {
       )}
 
       <PostTextWrapper>
-        <BackLink to="/blog">← Back to Blog</BackLink>
+        <BackLink to="/blog">&larr; Back to Blog</BackLink>
         <PostTitle>{post.title}</PostTitle>
         <PostMeta>
           {formatDate(post.created)}
         </PostMeta>
-        
-        <PostContent 
-          dangerouslySetInnerHTML={{ __html: post.content_html }} 
-        />
+
+        {post.blocks?.map(block => (
+          <div key={block.id}>
+            {renderBlock(block)}
+          </div>
+        ))}
+
+        {post.updates?.length > 0 && (
+          <UpdatesSection>
+            <h3>Updates</h3>
+            {post.updates.map(update => (
+              <Update key={update.id}>
+                <UpdateDate>{formatDate(update.created)}</UpdateDate>
+                <div dangerouslySetInnerHTML={{ __html: update.content_html }} />
+              </Update>
+            ))}
+          </UpdatesSection>
+        )}
       </PostTextWrapper>
 
     </PostContainer>

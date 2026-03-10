@@ -25,13 +25,13 @@ export const GlobalStyles = createGlobalStyle`
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* Pixel Style Typography: Big, Bold, High Contrast */
+  /* Typewriter Typography: Spaced, Legible, Manuscript-like */
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.fonts.heading};
-    font-weight: 800; /* Extra Bold */
+    font-weight: 700; /* Courier Prime's bold weight */
     color: ${({ theme }) => theme.colors.text};
-    line-height: 1.1;
-    letter-spacing: -0.04em; /* Tighter tracking for that modern editorial look */
+    line-height: 1.2;
+    letter-spacing: -0.02em; /* Just a tiny bit tighter for headings */
     margin-bottom: 1.5rem;
   }
 
@@ -49,10 +49,11 @@ export const GlobalStyles = createGlobalStyle`
 
   p {
     color: ${({ theme }) => theme.colors.textSecondary};
-    font-weight: 400; /* Increased from 300 for better readability on yellow */
+    font-weight: 400; 
+    line-height: 1.8; /* Gives the text that drafted, double-spaced feel */
     margin-bottom: 1.5rem;
-    max-width: 65ch; 
-    font-size: 1.1rem;
+    max-width: 70ch; /* Optimal reading width for monospace */
+    font-size: 1.05rem;
   }
   
   /* Selection color to match the sunflower */

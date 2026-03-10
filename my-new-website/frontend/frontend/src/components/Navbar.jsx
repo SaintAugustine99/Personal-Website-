@@ -1,6 +1,5 @@
 // src/components/Navbar.jsx
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,13 +19,14 @@ const NavWrapper = styled.nav`
   transition: background-color 0.4s ease, border-color 0.4s ease;
 `;
 
-const Logo = styled(Link)`
+const Logo = styled.a`
   font-size: 1.5rem;
   font-weight: 800;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
   z-index: 102; /* Ensure logo is above mobile menu overlay if needed */
   position: relative;
+  cursor: pointer;
   
   span {
     color: ${({ theme }) => theme.colors.accent};
@@ -44,31 +44,19 @@ const NavLinks = styled.div`
   }
 `;
 
-const StyledNavLink = styled(NavLink)`
+// Replace <StyledNavLink to="/..."> with standard anchor links
+const StyledScrollLink = styled.a`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-decoration: none;
-  font-weight: 500;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-weight: 600;
+  text-transform: uppercase;
   transition: color 0.3s ease;
   font-size: 0.95rem;
+  cursor: pointer;
 
-  &:hover, &.active {
-    color: ${({ theme }) => theme.colors.text};
-  }
-  
-  &.active {
+  &:hover {
     color: ${({ theme }) => theme.colors.accent};
-    position: relative;
-    
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: ${({ theme }) => theme.colors.accent};
-        border-radius: 2px;
-    }
   }
 `;
 
@@ -149,13 +137,14 @@ const MobileMenuOverlay = styled(motion.div)`
   padding: 2rem;
 `;
 
-const MobileNavLink = styled(Link)`
+const MobileNavLink = styled.a`
   font-size: 2rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
   margin: 1.5rem 0;
   transition: color 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     color: ${({ theme }) => theme.colors.accent};
@@ -182,16 +171,16 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
 
   return (
     <NavWrapper>
-      <Logo to="/" onClick={closeMenu}>OO<span>.</span></Logo>
+      <Logo href="#home" onClick={closeMenu}>OO<span>.</span></Logo>
       
       {/* Desktop Navigation */}
       <NavLinks>
-        <StyledNavLink to="/">Index</StyledNavLink>
-        <StyledNavLink to="/about">About</StyledNavLink>
-        <StyledNavLink to="/blog">Blog</StyledNavLink>
-        <StyledNavLink to="/experiments">Lab</StyledNavLink>
-        <StyledNavLink to="/portfolio">Portfolio</StyledNavLink>
-        <StyledNavLink to="/contact">Connect</StyledNavLink>
+        <StyledScrollLink href="#home">Index</StyledScrollLink>
+        <StyledScrollLink href="#about">About</StyledScrollLink>
+        <StyledScrollLink href="#portfolio">Work</StyledScrollLink>
+        <StyledScrollLink href="#experiments">Lab</StyledScrollLink>
+        <StyledScrollLink href="#blog">Thoughts</StyledScrollLink>
+        <StyledScrollLink href="#contact">Connect</StyledScrollLink>
         
         <ThemeToggle onClick={toggleTheme} aria-label="Toggle Theme">
           {isDarkMode ? '☀️' : '🌙'}
@@ -214,12 +203,12 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <MobileNavLink to="/" onClick={closeMenu}>Index</MobileNavLink>
-            <MobileNavLink to="/about" onClick={closeMenu}>About</MobileNavLink>
-            <MobileNavLink to="/blog" onClick={closeMenu}>Blog</MobileNavLink>
-            <MobileNavLink to="/experiments" onClick={closeMenu}>Lab</MobileNavLink>
-            <MobileNavLink to="/portfolio" onClick={closeMenu}>Portfolio</MobileNavLink>
-            <MobileNavLink to="/contact" onClick={closeMenu}>Connect</MobileNavLink>
+            <MobileNavLink href="#home" onClick={closeMenu}>Index</MobileNavLink>
+            <MobileNavLink href="#about" onClick={closeMenu}>About</MobileNavLink>
+            <MobileNavLink href="#portfolio" onClick={closeMenu}>Work</MobileNavLink>
+            <MobileNavLink href="#experiments" onClick={closeMenu}>Lab</MobileNavLink>
+            <MobileNavLink href="#blog" onClick={closeMenu}>Thoughts</MobileNavLink>
+            <MobileNavLink href="#contact" onClick={closeMenu}>Connect</MobileNavLink>
             
             <MobileThemeToggle onClick={() => { toggleTheme(); closeMenu(); }} aria-label="Toggle Theme">
                {isDarkMode ? '☀️' : '🌙'}
