@@ -4,6 +4,9 @@ import styled from 'styled-components';
 const FooterWrapper = styled.footer`
   padding: 2rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: ${({ theme }) => theme.colors.textSecondary};
   font-size: 0.9rem;
 `;

@@ -7,26 +7,27 @@ const NavWrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 100;
-  background: ${({ theme }) => theme.colors.navBg}; 
-  backdrop-filter: blur(10px);
+  background: ${({ theme }) => theme.colors.navBg};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   transition: background-color 0.4s ease, border-color 0.4s ease;
 `;
 
 const Logo = styled.a`
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
+  font-family: ${({ theme }) => theme.fonts.heading};
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
-  z-index: 102; /* Ensure logo is above mobile menu overlay if needed */
+  z-index: 102;
   position: relative;
   cursor: pointer;
+  letter-spacing: -0.03em;
   
   span {
     color: ${({ theme }) => theme.colors.accent};
@@ -44,15 +45,15 @@ const NavLinks = styled.div`
   }
 `;
 
-// Replace <StyledNavLink to="/..."> with standard anchor links
 const StyledScrollLink = styled.a`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-decoration: none;
-  font-family: ${({ theme }) => theme.fonts.heading};
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-weight: 400;
   text-transform: uppercase;
   transition: color 0.3s ease;
-  font-size: 0.95rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
   cursor: pointer;
 
   &:hover {
@@ -63,8 +64,8 @@ const StyledScrollLink = styled.a`
 const ThemeToggle = styled.button`
   background: none;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  padding: 0.5rem;
-  border-radius: 50%;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0; /* Square — brutalist */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -72,10 +73,11 @@ const ThemeToggle = styled.button`
   color: ${({ theme }) => theme.colors.text};
   margin-left: 1rem;
   transition: all 0.3s ease;
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 0.7rem;
 
   &:hover {
     background: ${({ theme }) => theme.colors.secondaryBg};
-    transform: rotate(15deg);
     border-color: ${({ theme }) => theme.colors.accent};
   }
 `;
@@ -91,7 +93,7 @@ const MobileMenuToggle = styled.button`
   border: none;
   cursor: pointer;
   padding: 0;
-  z-index: 102; /* Above the menu overlay */
+  z-index: 102;
 
   @media (max-width: 768px) {
     display: flex;
@@ -99,9 +101,8 @@ const MobileMenuToggle = styled.button`
 
   span {
     width: 2rem;
-    height: 0.25rem;
+    height: 2px; /* Thinner — brutalist */
     background: ${({ theme }) => theme.colors.text};
-    border-radius: 10px;
     transition: all 0.3s linear;
     position: relative;
     transform-origin: 1px;
@@ -138,13 +139,16 @@ const MobileMenuOverlay = styled(motion.div)`
 `;
 
 const MobileNavLink = styled.a`
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  text-transform: uppercase;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   transition: color 0.3s ease;
   cursor: pointer;
+  letter-spacing: -0.03em;
 
   &:hover {
     color: ${({ theme }) => theme.colors.accent};
@@ -153,9 +157,8 @@ const MobileNavLink = styled.a`
 
 const MobileThemeToggle = styled(ThemeToggle)`
   margin: 2rem 0 0 0;
-  width: 3rem;
-  height: 3rem;
-  font-size: 1.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
 `;
 
 const Navbar = ({ toggleTheme, isDarkMode }) => {
@@ -171,7 +174,7 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
 
   return (
     <NavWrapper>
-      <Logo href="#home" onClick={closeMenu}>OO<span>.</span></Logo>
+      <Logo href="#home" onClick={closeMenu}>O<span>.</span>O</Logo>
       
       {/* Desktop Navigation */}
       <NavLinks>
@@ -183,7 +186,7 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
         <StyledScrollLink href="#contact">Connect</StyledScrollLink>
         
         <ThemeToggle onClick={toggleTheme} aria-label="Toggle Theme">
-          {isDarkMode ? '☀️' : '🌙'}
+          {isDarkMode ? 'LIGHT' : 'DARK'}
         </ThemeToggle>
       </NavLinks>
 
@@ -211,7 +214,7 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
             <MobileNavLink href="#contact" onClick={closeMenu}>Connect</MobileNavLink>
             
             <MobileThemeToggle onClick={() => { toggleTheme(); closeMenu(); }} aria-label="Toggle Theme">
-               {isDarkMode ? '☀️' : '🌙'}
+               {isDarkMode ? 'LIGHT' : 'DARK'}
             </MobileThemeToggle>
           </MobileMenuOverlay>
         )}

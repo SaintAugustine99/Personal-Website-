@@ -2,10 +2,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 
 // --- Placeholder content ---
-// TODO: Replace this with your actual image
 const PROFILE_IMAGE_URL = "https://via.placeholder.com/350";
 
 const skills = [
@@ -22,10 +20,9 @@ const AboutContainer = styled(motion.div)`
 `;
 
 const PageHeader = styled.h1`
-  font-size: 3rem;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.violet};
-  text-shadow: ${({ theme }) => theme.glowViolet};
+  font-size: clamp(3rem, 8vw, 6rem);
+  text-align: left;
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 3rem;
 `;
 
@@ -42,9 +39,8 @@ const AboutContent = styled.div`
 `;
 
 const ProfileSection = styled.div`
-  text-align: center;
   @media (max-width: 768px) {
-    order: -1; // Move image to top on mobile
+    order: -1;
   }
 `;
 
@@ -52,28 +48,32 @@ const ProfileImage = styled.img`
   width: 100%;
   max-width: 300px;
   height: auto;
-  border-radius: 8px;
-  border: 2px solid ${({ theme }) => theme.colors.lightBg};
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  margin-bottom: 1.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  filter: grayscale(100%);
+  transition: filter 0.6s ease;
+  
+  &:hover {
+    filter: grayscale(0%);
+  }
 `;
 
 const TextSection = styled.div`
   h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: ${({ theme }) => theme.colors.text};
     margin-bottom: 1rem;
   }
 
   p {
-    font-size: 1.1rem;
+    font-family: ${({ theme }) => theme.fonts.body};
+    font-size: 1.15rem;
     line-height: 1.7;
     color: ${({ theme }) => theme.colors.textSecondary};
     margin-bottom: 1.5rem;
   }
 
   a {
-    color: ${({ theme }) => theme.colors.teal};
+    color: ${({ theme }) => theme.colors.accent};
     text-decoration: underline;
     font-weight: 500;
   }
@@ -81,21 +81,33 @@ const TextSection = styled.div`
 
 const SkillsContainer = styled.div`
   margin-top: 2rem;
+  
+  h3 {
+    font-family: ${({ theme }) => theme.fonts.mono};
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: ${({ theme }) => theme.colors.textSecondary};
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
 `;
 
 const SkillsGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
 `;
 
 const SkillBadge = styled.span`
-  background: rgba(102, 252, 241, 0.1);
-  color: ${({ theme }) => theme.colors.teal};
-  padding: 0.4rem 0.9rem;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  background: transparent;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  padding: 0.3rem 0.7rem;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 `;
 
 const About = () => {
@@ -105,25 +117,32 @@ const About = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <PageHeader>About Me</PageHeader>
+      <PageHeader>About</PageHeader>
       <AboutContent>
         <ProfileSection>
           <ProfileImage src={PROFILE_IMAGE_URL} alt="Onserio Ogeto" />
         </ProfileSection>
 
         <TextSection>
-          <h2>Who I Am</h2>
           <p>
-            I am a multidisciplinary researcher, interested in Philosophy, The Sciences and The Arts". I have formal training in The Laws, Software Engineering and Cybersecurity.
+            I am a multidisciplinary researcher, interested in Philosophy, The Sciences and The Arts. I have formal training in The Laws, Software Engineering and Cybersecurity.
           </p>
           <p>
-            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <i>Others</i>. Currently building competence in AI governance research work.
+            I am leveraging my background and interests to determine meaningful methods for abstracting and resolving problems that are unique to human being;- particularly for the subaltern- we former <em>Others</em>. Currently building competence in AI governance research work.
           </p>
           <p>
-            When I am not programming, experimenting, or drawing/writing/reading,  you can find me hiking, sleeping, cycling, running. Feel free
-            to <Link to="/contact">get in touch</Link>!
+            When I am not programming, experimenting, or drawing/writing/reading, you can find me hiking, sleeping, cycling, running. Feel free
+            to <a href="#contact">get in touch</a>!
           </p>
 
+          <SkillsContainer>
+            <h3>// Tools & Disciplines</h3>
+            <SkillsGrid>
+              {skills.map(skill => (
+                <SkillBadge key={skill}>{skill}</SkillBadge>
+              ))}
+            </SkillsGrid>
+          </SkillsContainer>
         </TextSection>
       </AboutContent>
     </AboutContainer>

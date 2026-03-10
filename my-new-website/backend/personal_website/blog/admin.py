@@ -1,27 +1,25 @@
 from django.contrib import admin
+from .models import BlogPost, Tag, ContentBlock, BlogUpdate
 
-# Register your models here.
-from django.contrib import admin
-from .models import BlogPost, Tag, BlogImage
-
-class BlogImageInline(admin.TabularInline):
-    model = BlogImage
+class ContentBlockInline(admin.StackedInline):
+    model = ContentBlock
     extra = 1
-    readonly_fields = ('image_url',)
-    
-    def image_url(self, instance):
-        if instance.image:
-            return instance.image.url
-        return "-"
+    fields = ['block_type', 'order', 'text', 'image', 'image_caption', 'image_alt', 'link_url']
+
+class BlogUpdateInline(admin.StackedInline):
+    model = BlogUpdate
+    extra = 0
+    readonly_fields = ['created']
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'published', 'created', 'has_visualization']
-    list_filter = ['published', 'created', 'has_visualization']
-    search_fields = ['title', 'content']
+    list_display = ['title', 'published', 'created']
+    list_filter = ['published', 'created']
+    search_fields = ['title']
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'created'
-    inlines = [BlogImageInline]
+    inlines = [ContentBlockInline, BlogUpdateInline]
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}

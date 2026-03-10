@@ -2,8 +2,6 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
-  /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap'); - Removed for Book Antiqua */
-
   *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -25,17 +23,17 @@ export const GlobalStyles = createGlobalStyle`
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* Typewriter Typography: Spaced, Legible, Manuscript-like */
+  /* Brutalist Typography: Massive, Tight, Poster-like */
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.fonts.heading};
-    font-weight: 700; /* Courier Prime's bold weight */
+    font-weight: 800;
     color: ${({ theme }) => theme.colors.text};
-    line-height: 1.2;
-    letter-spacing: -0.02em; /* Just a tiny bit tighter for headings */
+    line-height: 0.95;
+    letter-spacing: -0.05em;
     margin-bottom: 1.5rem;
+    text-transform: uppercase;
   }
 
-  /* Links are bold and coloured */
   a {
     color: ${({ theme }) => theme.colors.text};
     text-decoration: none;
@@ -49,22 +47,22 @@ export const GlobalStyles = createGlobalStyle`
 
   p {
     color: ${({ theme }) => theme.colors.textSecondary};
-    font-weight: 400; 
-    line-height: 1.8; /* Gives the text that drafted, double-spaced feel */
+    font-family: ${({ theme }) => theme.fonts.body};
+    font-weight: 400;
+    line-height: 1.7;
     margin-bottom: 1.5rem;
-    max-width: 70ch; /* Optimal reading width for monospace */
-    font-size: 1.05rem;
+    max-width: 65ch;
+    font-size: 1.15rem;
   }
   
-  /* Selection color to match the sunflower */
   ::selection {
     background: ${({ theme }) => theme.colors.accent};
     color: #000;
   }
 
-  /* Scrollbar Customization for that "Smooth" feel */
+  /* Thin minimal scrollbar — brutalist */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -73,7 +71,6 @@ export const GlobalStyles = createGlobalStyle`
 
   ::-webkit-scrollbar-thumb {
     background-color: ${({ theme }) => theme.colors.textSecondary};
-    border-radius: 20px; /* Pill shape scrollbar */
-    border: 3px solid ${({ theme }) => theme.colors.mainBg}; /* Creates padding around the bar */
+    border-radius: 0; /* Square, not pill */
   }
 `;
