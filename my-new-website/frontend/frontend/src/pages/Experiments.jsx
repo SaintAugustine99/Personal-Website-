@@ -9,7 +9,7 @@ import Construction from '../components/Construction';
 const API_URL = "http://127.0.0.1:8000";
 
 // Set this to TRUE to force the construction page
-const FORCE_CONSTRUCTION_MODE = true;
+const FORCE_CONSTRUCTION_MODE = false;
 
 const PageContainer = styled(motion.div)`
   max-width: 1200px;
@@ -203,6 +203,64 @@ const ViewToggle = styled.div`
   justify-content: center;
 `;
 
+// Featured Emergence Visualization
+const FeaturedSection = styled(motion.section)`
+  margin-bottom: 4rem;
+`;
+
+const FeaturedCard = styled.div`
+  background: ${({ theme }) => theme.colors.secondaryBg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 16px;
+  overflow: hidden;
+`;
+
+const FeaturedHeader = styled.div`
+  padding: 2rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+const FeaturedLabel = styled.span`
+  display: inline-block;
+  background: ${({ theme }) => theme.colors.teal};
+  color: ${({ theme }) => theme.colors.mainBg};
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+`;
+
+const FeaturedTitle = styled.h2`
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+const FeaturedDescription = styled.p`
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: 1.7;
+  max-width: 700px;
+  font-size: 1rem;
+`;
+
+const EmergenceFrame = styled.iframe`
+  width: 100%;
+  height: 600px;
+  border: none;
+  display: block;
+
+  @media (max-width: 768px) {
+    height: 500px;
+  }
+
+  @media (max-width: 480px) {
+    height: 420px;
+  }
+`;
+
 const ActionButton = styled.a`
   padding: 0.6rem 1.2rem;
   background: ${({ primary, theme }) => primary ? theme.colors.teal : 'transparent'};
@@ -290,6 +348,32 @@ const Experiments = () => {
           Click on a card to interact or view details.
         </p>
       </Header>
+
+      {/* Featured: Emergence Visualization */}
+      <FeaturedSection
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        <FeaturedCard>
+          <FeaturedHeader>
+            <FeaturedLabel>Featured Experiment</FeaturedLabel>
+            <FeaturedTitle>Emergence</FeaturedTitle>
+            <FeaturedDescription>
+              Six interactive simulations exploring emergence — the phenomenon by which
+              higher-order properties arise irreducibly from local interactions. From boid
+              flocking to vascular trees governed by Murray's Law, each visualization
+              demonstrates how complex structure crystallizes from simple rules.
+            </FeaturedDescription>
+          </FeaturedHeader>
+          <EmergenceFrame
+            src="/emergence.html"
+            title="Emergence Visualization"
+            allow="fullscreen"
+            loading="lazy"
+          />
+        </FeaturedCard>
+      </FeaturedSection>
 
       <Grid>
         {experiments.map((exp, i) => (
