@@ -4,8 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-const API_URL = "http://127.0.0.1:8000";
+import { API_URL } from '../config/api';
 
 const Container = styled.div`
   padding-top: 4rem;

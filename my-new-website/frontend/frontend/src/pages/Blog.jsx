@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const API_URL = "http://127.0.0.1:8000";
+import { API_URL } from '../config/api';
+import { useBodyScroll } from '../hooks/useBodyScroll';
 
 const BlogContainer = styled.div`
   max-width: 900px;
@@ -199,6 +199,9 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  // Lock body scroll when a post is open
+  useBodyScroll(selectedPost !== null);
+
   useEffect(() => {
     axios.get(`${API_URL}/api/blog/posts/`)
       .then(response => {
@@ -214,12 +217,10 @@ const Blog = () => {
 
   const openPost = (post) => {
     setSelectedPost(post);
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
   };
 
   const closePost = () => {
     setSelectedPost(null);
-    document.body.style.overflow = '';
   };
 
   // Close on Escape key

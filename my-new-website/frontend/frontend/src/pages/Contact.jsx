@@ -3,8 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Button, Input, TextArea } from '../components/common';
-
-const API_URL = "http://127.0.0.1:8000"; // Django backend
+import { API_URL } from '../config/api';
 
 const ContactContainer = styled(motion.div)`
   max-width: 600px;

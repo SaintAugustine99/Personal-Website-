@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NAV_ITEMS } from '../config/navLinks';
 
 const NavWrapper = styled.nav`
   display: flex;
@@ -178,13 +179,12 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
       
       {/* Desktop Navigation */}
       <NavLinks>
-        <StyledScrollLink href="#home">Index</StyledScrollLink>
-        <StyledScrollLink href="#about">About</StyledScrollLink>
-        <StyledScrollLink href="#portfolio">Work</StyledScrollLink>
-        <StyledScrollLink href="#experiments">Lab</StyledScrollLink>
-        <StyledScrollLink href="#blog">Thoughts</StyledScrollLink>
-        <StyledScrollLink href="#contact">Connect</StyledScrollLink>
-        
+        {NAV_ITEMS.map((item) => (
+          <StyledScrollLink key={item.href} href={item.href}>
+            {item.label}
+          </StyledScrollLink>
+        ))}
+
         <ThemeToggle onClick={toggleTheme} aria-label="Toggle Theme">
           {isDarkMode ? 'LIGHT' : 'DARK'}
         </ThemeToggle>
@@ -206,13 +206,12 @@ const Navbar = ({ toggleTheme, isDarkMode }) => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <MobileNavLink href="#home" onClick={closeMenu}>Index</MobileNavLink>
-            <MobileNavLink href="#about" onClick={closeMenu}>About</MobileNavLink>
-            <MobileNavLink href="#portfolio" onClick={closeMenu}>Work</MobileNavLink>
-            <MobileNavLink href="#experiments" onClick={closeMenu}>Lab</MobileNavLink>
-            <MobileNavLink href="#blog" onClick={closeMenu}>Thoughts</MobileNavLink>
-            <MobileNavLink href="#contact" onClick={closeMenu}>Connect</MobileNavLink>
-            
+            {NAV_ITEMS.map((item) => (
+              <MobileNavLink key={item.href} href={item.href} onClick={closeMenu}>
+                {item.label}
+              </MobileNavLink>
+            ))}
+
             <MobileThemeToggle onClick={() => { toggleTheme(); closeMenu(); }} aria-label="Toggle Theme">
                {isDarkMode ? 'LIGHT' : 'DARK'}
             </MobileThemeToggle>

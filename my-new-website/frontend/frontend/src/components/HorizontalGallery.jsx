@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import axios from 'axios';
+import { API_URL } from '../config/api';
 
 const GalleryContainer = styled.section`
   position: relative;
@@ -129,7 +130,7 @@ const HorizontalGallery = () => {
   const targetRef = useRef(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/portfolio/projects/')
+    axios.get(`${API_URL}/api/portfolio/projects/`)
       .then(res => setProjects(res.data.results || res.data))
       .catch(err => {
         console.error(err);
@@ -155,7 +156,7 @@ const HorizontalGallery = () => {
           {projects.map((project, index) => (
             <ProjectCard key={project.id} href={project.url || `/project/${project.slug}`} target="_blank" rel="noopener noreferrer">
               <ProjectImage 
-                src={project.thumbnail ? `http://127.0.0.1:8000${project.thumbnail}` : 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop'} 
+                src={project.thumbnail ? `${API_URL}${project.thumbnail}` : 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop'} 
                 alt={project.title} 
               />
               <ProjectInfo>
