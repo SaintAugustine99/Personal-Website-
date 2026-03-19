@@ -1,6 +1,8 @@
 // src/components/Starfield.jsx
 import React, { useRef, useEffect, useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
+import Particle from './Particle';
+import SpatialGrid from './SpatialGrid';
 
 // This is our <canvas> element, styled to be the background
 const StyledCanvas = styled.canvas`
@@ -13,102 +15,36 @@ const StyledCanvas = styled.canvas`
   background: linear-gradient(135deg, ${({ theme }) => theme.colors.darkBg}, ${({ theme }) => theme.colors.lightBg});
 `;
 
+// Configuration constants
+const CONFIG = {
+  // Connection settings
+  MAX_CONNECTION_DISTANCE: 100, // Reduced from dynamic calculation for better performance
+  MAX_CONNECTIONS_PER_PARTICLE: 5, // Limit connections per particle to reduce overdraw
+
+  // Grid cell size should be >= MAX_CONNECTION_DISTANCE for correct neighbor detection
+  GRID_CELL_SIZE: 100,
+
+  // Mouse interaction
+  MOUSE_RADIUS: 150,
+
+  // Particle density - higher = fewer particles
+  PARTICLE_DENSITY: 9000,
+};
+
 const Starfield = () => {
   const canvasRef = useRef(null);
-  const theme = useContext(ThemeContext); // Get theme colors
+  const theme = useContext(ThemeContext);
 
-  // We use refs for these values because they will be updated inside the
-  // animation loop, and we don't want to trigger React re-renders.
+  // Refs for animation state (don't trigger re-renders)
   const mouse = useRef({
     x: null,
     y: null,
-    radius: 150 // The radius of influence for the mouse
+    radius: CONFIG.MOUSE_RADIUS
   });
   const particlesArray = useRef([]);
+  const spatialGrid = useRef(null);
 
-  // --- Particle Class ---
-  // This is the blueprint for every star
-  class Particle {
-    constructor(x, y, radius, color, isConstellation = false) {
-      this.x = x;
-      this.y = y;
-      this.radius = radius;
-      this.color = color;
-      
-      // 'home' is the original constellation position
-      this.homeX = x;
-      this.homeY = y;
-      
-      // 'vx'/'vy' is the velocity for the "free-floating" effect
-      this.vx = (Math.random() - 0.5) * 0.3;
-      this.vy = (Math.random() - 0.5) * 0.3;
-      
-      this.isConstellation = isConstellation;
-      
-      // How much the particle is affected by forces
-      this.density = Math.random() * 30 + 10;
-    }
-
-    draw(ctx) {
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.fill();
-    }
-
-    update(ctx, canvasWidth, canvasHeight) {
-      // --- 1. Mouse Interaction (Repulsion) ---
-      // This is the "changes trajectory" effect
-      let dx = mouse.current.x - this.x;
-      let dy = mouse.current.y - this.y;
-      let distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < mouse.current.radius) {
-        // Calculate a force based on how close the mouse is
-        const forceDirectionX = dx / distance;
-        const forceDirectionY = dy / distance;
-        const force = (mouse.current.radius - distance) / mouse.current.radius;
-        
-        // Apply the force, slowed by the particle's "density"
-        this.vx -= forceDirectionX * force * (1 / this.density);
-        this.vy -= forceDirectionY * force * (1 / this.density);
-      }
-
-      // --- 2. Spring Force (For Constellations) ---
-      // This pulls the constellation stars back to their "home"
-      if (this.isConstellation) {
-        let homeDX = this.homeX - this.x;
-        let homeDY = this.homeY - this.y;
-        this.vx += homeDX * 0.005 * (1 / this.density);
-        this.vy += homeDY * 0.005 * (1 / this.density);
-      }
-
-      // --- 3. Friction & Movement ---
-      // This makes them slow down naturally
-      this.vx *= 0.96; 
-      this.vy *= 0.96;
-
-      // Update position
-      this.x += this.vx;
-      this.y += this.vy;
-
-      // --- 4. Handle Screen Edges ---
-      // This makes the "free-floating" stars wrap around
-      if (!this.isConstellation) {
-        if (this.x > canvasWidth) this.x = 0;
-        if (this.x < 0) this.x = canvasWidth;
-        if (this.y > canvasHeight) this.y = 0;
-        if (this.y < 0) this.y = canvasHeight;
-      }
-
-      this.draw(ctx);
-    }
-  }
-  
   // --- Constellation Data ---
-  // Simple coordinates for a few constellations.
-  // We'll scale and position them dynamically.
   const constellations = [
     // Ursa Major (Big Dipper)
     [
@@ -129,26 +65,33 @@ const Starfield = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    
+
     // Set colors from our theme
     const colorPrimary = theme.colors.textSecondary;
-    const colorSecondary = theme.colors.teal;
-    const colorLines = 'rgba(102, 252, 241, 0.15)'; // Faint teal lines
 
     let animationFrameId;
 
+    // Squared distance for comparison (avoids sqrt in hot path)
+    const maxDistanceSquared = CONFIG.MAX_CONNECTION_DISTANCE * CONFIG.MAX_CONNECTION_DISTANCE;
+
     // --- Init Function ---
-    // This creates all our stars
     const init = () => {
       particlesArray.current = [];
       const canvasWidth = window.innerWidth;
       const canvasHeight = window.innerHeight;
-      
+
       // Set canvas size
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
-      
-      const numberOfParticles = (canvas.width * canvas.height) / 9000;
+
+      // Initialize or resize spatial grid
+      if (!spatialGrid.current) {
+        spatialGrid.current = new SpatialGrid(canvasWidth, canvasHeight, CONFIG.GRID_CELL_SIZE);
+      } else {
+        spatialGrid.current.resize(canvasWidth, canvasHeight);
+      }
+
+      const numberOfParticles = (canvas.width * canvas.height) / CONFIG.PARTICLE_DENSITY;
 
       // 1. Create the "free-floating" stars
       for (let i = 0; i < numberOfParticles; i++) {
@@ -164,9 +107,8 @@ const Starfield = () => {
       const offsetY = canvasHeight / 2 - (100 * scale);
 
       const constellation = constellations[Math.floor(Math.random() * constellations.length)];
-      
       const constellationColor = theme.colors.violet;
-      
+
       for (let i = 0; i < constellation.length; i++) {
         let radius = (Math.random() * 1) + 1;
         let x = (constellation[i].x * scale) + offsetX;
@@ -175,27 +117,64 @@ const Starfield = () => {
       }
     };
 
-    // --- Connect Lines Function ---
-    // This draws the "shifting geometries"
+    // --- Optimized Connect Lines Function ---
+    // Uses spatial partitioning to reduce O(n^2) to approximately O(n)
     const connect = () => {
-      let opacityValue = 1;
-      for (let a = 0; a < particlesArray.current.length; a++) {
-        for (let b = a; b < particlesArray.current.length; b++) {
-          let particleA = particlesArray.current[a];
-          let particleB = particlesArray.current[b];
-          let distance = 
-            (particleA.x - particleB.x) * (particleA.x - particleB.x) +
-            (particleA.y - particleB.y) * (particleA.y - particleB.y);
+      const particles = particlesArray.current;
+      const grid = spatialGrid.current;
 
-          // Draw line if they are close
-          if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-            opacityValue = 1 - (distance / 20000);
-            ctx.strokeStyle = `rgba(102, 252, 241, ${opacityValue * 0.1})`;
+      // Update spatial grid with current particle positions
+      grid.populate(particles);
+
+      // Track connections per particle to limit overdraw
+      const connectionCounts = new Uint8Array(particles.length);
+
+      // For each particle, only check neighbors in nearby grid cells
+      for (let a = 0; a < particles.length; a++) {
+        // Skip if this particle already has max connections
+        if (connectionCounts[a] >= CONFIG.MAX_CONNECTIONS_PER_PARTICLE) {
+          continue;
+        }
+
+        const particleA = particles[a];
+        const neighborIndices = grid.getNeighborIndices(a, particles);
+
+        for (let i = 0; i < neighborIndices.length; i++) {
+          const b = neighborIndices[i];
+
+          // Skip if the other particle already has max connections
+          if (connectionCounts[b] >= CONFIG.MAX_CONNECTIONS_PER_PARTICLE) {
+            continue;
+          }
+
+          const particleB = particles[b];
+
+          // Calculate squared distance (avoid sqrt for performance)
+          const dx = particleA.x - particleB.x;
+          const dy = particleA.y - particleB.y;
+          const distanceSquared = dx * dx + dy * dy;
+
+          // Draw line if they are close enough
+          if (distanceSquared < maxDistanceSquared) {
+            // Calculate opacity based on distance
+            const distance = Math.sqrt(distanceSquared);
+            const opacityValue = 1 - (distance / CONFIG.MAX_CONNECTION_DISTANCE);
+
+            ctx.strokeStyle = `rgba(102, 252, 241, ${opacityValue * 0.15})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particleA.x, particleA.y);
             ctx.lineTo(particleB.x, particleB.y);
             ctx.stroke();
+
+            // Increment connection counts
+            connectionCounts[a]++;
+            connectionCounts[b]++;
+
+            // Break if this particle has reached max connections
+            if (connectionCounts[a] >= CONFIG.MAX_CONNECTIONS_PER_PARTICLE) {
+              break;
+            }
           }
         }
       }
@@ -211,7 +190,7 @@ const Starfield = () => {
 
       // Update and draw every particle
       for (const particle of particlesArray.current) {
-        particle.update(ctx, canvas.width, canvas.height);
+        particle.update(ctx, canvas.width, canvas.height, mouse.current);
       }
     };
 
@@ -220,7 +199,7 @@ const Starfield = () => {
       mouse.current.x = event.x;
       mouse.current.y = event.y;
     };
-    
+
     const handleResize = () => {
       cancelAnimationFrame(animationFrameId);
       init();
@@ -236,13 +215,12 @@ const Starfield = () => {
     animate();
 
     // --- Cleanup ---
-    // This runs when the component unmounts
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
     };
-  }, [theme]); // Re-run if theme changes
+  }, [theme]);
 
   return <StyledCanvas ref={canvasRef} />;
 };
