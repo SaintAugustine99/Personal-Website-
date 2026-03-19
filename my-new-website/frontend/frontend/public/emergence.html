@@ -12,19 +12,19 @@
     }
 
     :root {
-      --bg: #0b0c10;
-      --bg-surface: rgba(20, 20, 20, 0.6);
-      --text: #e0e0e0;
-      --text-dim: #7a8a8a;
-      --teal: #66fcf1;
-      --teal-dim: rgba(102, 252, 241, 0.15);
-      --teal-mid: rgba(102, 252, 241, 0.4);
-      --accent: #c5c6c7;
-      --border: rgba(102, 252, 241, 0.12);
-      --arterial: #e24b4a;
-      --venous: #378add;
+      --bg: #0F0E0B;
+      --bg-surface: rgba(30, 28, 22, 0.7);
+      --text: #FDFBF7;
+      --text-dim: #B0ADA5;
+      --teal: #E6AA00;
+      --teal-dim: rgba(230, 170, 0, 0.12);
+      --teal-mid: rgba(230, 170, 0, 0.35);
+      --accent: #556B2F;
+      --border: rgba(230, 170, 0, 0.15);
+      --arterial: #C68E17;
+      --venous: #8B6914;
       --amber: #ef9f27;
-      --slime-green: #5dcaa5;
+      --slime-green: #8F9F73;
       --brown-root: #6a5a4a;
       --brown-trunk: #4a3a2a;
     }
@@ -32,7 +32,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Courier Prime', 'Courier New', monospace;
       line-height: 1.6;
       min-height: 100vh;
     }
@@ -56,7 +56,7 @@
       background: none;
       border: 1px solid transparent;
       color: var(--text-dim);
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Courier Prime', 'Courier New', monospace;
       font-size: 0.82rem;
       cursor: pointer;
       padding: 0.4rem 0.9rem;
@@ -98,13 +98,13 @@
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--border);
-      background: #000;
+      background: #0F0E0B;
     }
 
     canvas {
       display: block;
       width: 100%;
-      background: #000;
+      background: #0F0E0B;
     }
 
     .stats {
@@ -112,7 +112,7 @@
       gap: 1.5rem;
       flex-wrap: wrap;
       margin-bottom: 1.5rem;
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-family: 'Courier Prime', 'Courier New', monospace;
       font-size: 0.78rem;
       color: var(--text-dim);
       padding: 0.75rem 1rem;
@@ -128,7 +128,7 @@
     }
 
     .stat-label {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Courier Prime', 'Courier New', monospace;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -174,7 +174,7 @@
       -webkit-appearance: none;
       appearance: none;
       height: 3px;
-      background: rgba(102, 252, 241, 0.15);
+      background: rgba(230, 170, 0, 0.15);
       outline: none;
       cursor: pointer;
       border-radius: 2px;
@@ -189,7 +189,7 @@
       cursor: pointer;
       border-radius: 50%;
       border: 2px solid var(--bg);
-      box-shadow: 0 0 6px rgba(102, 252, 241, 0.3);
+      box-shadow: 0 0 6px rgba(230, 170, 0, 0.3);
     }
 
     .control-slider::-moz-range-thumb {
@@ -202,7 +202,7 @@
     }
 
     .control-value {
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-family: 'Courier Prime', 'Courier New', monospace;
       font-size: 0.78rem;
       color: var(--teal);
       min-width: 45px;
@@ -321,13 +321,14 @@
 
     <!-- Ants -->
     <div class="simulation-panel" id="panel-ants">
-      <p class="blurb">Each ant deposits pheromone. Stronger trails attract more ants, which strengthen the trail further. The shortest path to food self-selects through positive feedback alone — no ant ever surveys the whole.</p>
+      <p class="blurb">Each ant deposits pheromone. Stronger trails attract more ants, which strengthen the trail further. Scouts explore independently — when one finds food, it signals the colony. Distinct trails crystallise to each source through positive feedback alone.</p>
       <div class="canvas-container">
         <canvas id="canvas-ants" role="img" aria-label="Ant pheromone trail simulation showing emergent path optimization"></canvas>
       </div>
       <div class="stats" id="stats-ants">
         <div class="stat"><span class="stat-label">on trail</span><span class="stat-value" id="stat-ontrail">0</span></div>
         <div class="stat"><span class="stat-label">carrying</span><span class="stat-value" id="stat-carrying">0</span></div>
+        <div class="stat"><span class="stat-label">delivered</span><span class="stat-value" id="stat-delivered">0</span></div>
         <div class="stat"><span class="stat-label">trail density</span><span class="stat-value" id="stat-density">0</span></div>
       </div>
       <div class="controls">
@@ -569,7 +570,7 @@
           this.trailCanvas.width = this.canvas.width;
           this.trailCanvas.height = this.canvas.height;
           this.trailCtx = this.trailCanvas.getContext('2d');
-          this.trailCtx.fillStyle = '#000';
+          this.trailCtx.fillStyle = '#0F0E0B';
           this.trailCtx.fillRect(0, 0, this.trailCanvas.width, this.trailCanvas.height);
 
           setupSlider('swarm-separation', v => v.toFixed(1));
@@ -685,10 +686,10 @@
           const ctx = this.ctx;
           const tCtx = this.trailCtx;
 
-          tCtx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+          tCtx.fillStyle = 'rgba(15, 14, 11, 0.06)';
           tCtx.fillRect(0, 0, this.trailCanvas.width, this.trailCanvas.height);
           for (const agent of this.agents) {
-            tCtx.fillStyle = 'rgba(102, 252, 241, 0.08)';
+            tCtx.fillStyle = 'rgba(230, 170, 0, 0.08)';
             tCtx.beginPath();
             tCtx.arc(agent.x, agent.y, 2, 0, Math.PI * 2);
             tCtx.fill();
@@ -709,7 +710,7 @@
             ctx.lineTo(-3, 0);
             ctx.lineTo(-4, -3);
             ctx.closePath();
-            ctx.fillStyle = `rgba(102, 252, 241, ${alpha.toFixed(2)})`;
+            ctx.fillStyle = `rgba(230, 170, 0, ${alpha.toFixed(2)})`;
             ctx.fill();
             ctx.restore();
           }
@@ -727,14 +728,19 @@
       };
 
       // ==========================================
-      // ANT PHEROMONE — rich heat-map trails
+      // ANT COLONY — classic pheromone trail behavior
+      // Ants explore from home, find food, return while
+      // laying trail. Returning ants recruit explorers on contact.
       // ==========================================
       const ants = {
         canvas: null, ctx: null, ants: [],
-        pheromone: null, pheromoneImg: null,
+        pheromone: null,
+        trailCanvas: null, trailCtx: null,
         params: { evaporation: 0.015, deposit: 10, count: 120, wander: 0.15 },
-        nestPos: { x: 0, y: 0 }, foodPos: { x: 0, y: 0 },
-        foodSources: [],
+        nestPos: { x: 0, y: 0 },
+        foodPos: { x: 0, y: 0 },
+        foodRadius: 20,
+        totalDelivered: 0,
         w: 0, h: 0,
 
         init() {
@@ -762,27 +768,36 @@
           this.canvas.width = this.w;
           this.canvas.height = this.h;
 
-          this.nestPos = { x: 60, y: this.h / 2 };
-          this.foodSources = [
-            { x: this.w - 70, y: this.h * 0.3, radius: 18 },
-            { x: this.w - 90, y: this.h * 0.7, radius: 14 },
-            { x: this.w * 0.6, y: 50, radius: 10 }
-          ];
-          this.foodPos = this.foodSources[0];
+          // Home on left, food on right
+          this.nestPos = { x: 80, y: this.h / 2 };
+          this.foodPos = { x: this.w - 80, y: this.h / 2 };
+          this.foodRadius = 22;
 
+          // Single pheromone field
           this.pheromone = new Float32Array(this.w * this.h);
-          this.pheromoneImg = this.ctx.createImageData(this.w, this.h);
+
+          // Trail canvas for drawing line trails
+          this.trailCanvas = document.createElement('canvas');
+          this.trailCanvas.width = this.w;
+          this.trailCanvas.height = this.h;
+          this.trailCtx = this.trailCanvas.getContext('2d');
+          this.trailCtx.fillStyle = '#0F0E0B';
+          this.trailCtx.fillRect(0, 0, this.w, this.h);
+
+          this.totalDelivered = 0;
         },
 
         createAnts(count) {
           this.ants = [];
           for (let i = 0; i < count; i++) {
             this.ants.push({
-              x: this.nestPos.x + (Math.random() - 0.5) * 20,
-              y: this.nestPos.y + (Math.random() - 0.5) * 20,
+              x: this.nestPos.x + (Math.random() - 0.5) * 30,
+              y: this.nestPos.y + (Math.random() - 0.5) * 30,
+              prevX: this.nestPos.x,
+              prevY: this.nestPos.y,
               angle: Math.random() * Math.PI * 2,
-              hasFood: false,
-              targetFood: null
+              state: 'EXPLORING', // EXPLORING or RETURNING
+              hasFood: false
             });
           }
         },
@@ -790,17 +805,23 @@
         adjustAntCount(n) {
           while (this.ants.length < n) {
             this.ants.push({
-              x: this.nestPos.x, y: this.nestPos.y,
-              angle: Math.random() * Math.PI * 2, hasFood: false, targetFood: null
+              x: this.nestPos.x + (Math.random() - 0.5) * 30,
+              y: this.nestPos.y + (Math.random() - 0.5) * 30,
+              prevX: this.nestPos.x,
+              prevY: this.nestPos.y,
+              angle: Math.random() * Math.PI * 2,
+              state: 'EXPLORING',
+              hasFood: false
             });
           }
           while (this.ants.length > n) this.ants.pop();
           this.params.count = n;
         },
 
+        // Sense pheromone at a point ahead
         sense(x, y, angle, offset) {
           const sa = angle + offset;
-          const sd = 14;
+          const sd = 12;
           const sx = Math.floor(x + Math.cos(sa) * sd);
           const sy = Math.floor(y + Math.sin(sa) * sd);
           if (sx < 0 || sx >= this.w || sy < 0 || sy >= this.h) return 0;
@@ -818,87 +839,121 @@
 
         update() {
           const w = this.w, h = this.h;
-          const speed = 2.2;
+          const speed = 2.0;
           const senseAngle = Math.PI / 5;
-          const turnRate = 0.35;
+          const turnRate = 0.3;
+          const contactRadius = 15; // Distance for ant-to-ant recruitment
 
-          const newPh = new Float32Array(w * h);
+          // Evaporate and diffuse pheromone
           const evap = 1 - this.params.evaporation;
-
+          const newPh = new Float32Array(w * h);
           for (let y = 1; y < h - 1; y++) {
             for (let x = 1; x < w - 1; x++) {
               const idx = y * w + x;
-              let sum = this.pheromone[idx] * 0.7;
-              sum += this.pheromone[idx - 1] * 0.06;
-              sum += this.pheromone[idx + 1] * 0.06;
-              sum += this.pheromone[idx - w] * 0.06;
-              sum += this.pheromone[idx + w] * 0.06;
-              sum += this.pheromone[idx - w - 1] * 0.015;
-              sum += this.pheromone[idx - w + 1] * 0.015;
-              sum += this.pheromone[idx + w - 1] * 0.015;
-              sum += this.pheromone[idx + w + 1] * 0.015;
+              let sum = this.pheromone[idx] * 0.75;
+              sum += this.pheromone[idx - 1] * 0.05;
+              sum += this.pheromone[idx + 1] * 0.05;
+              sum += this.pheromone[idx - w] * 0.05;
+              sum += this.pheromone[idx + w] * 0.05;
+              sum += this.pheromone[idx - w - 1] * 0.0125;
+              sum += this.pheromone[idx - w + 1] * 0.0125;
+              sum += this.pheromone[idx + w - 1] * 0.0125;
+              sum += this.pheromone[idx + w + 1] * 0.0125;
               newPh[idx] = sum * evap;
             }
           }
           this.pheromone = newPh;
 
+          // Update each ant
           for (const ant of this.ants) {
-            const target = ant.hasFood ? this.nestPos : (ant.targetFood || this.foodSources[0]);
+            // Store previous position for trail drawing
+            ant.prevX = ant.x;
+            ant.prevY = ant.y;
 
-            const left = this.sense(ant.x, ant.y, ant.angle, -senseAngle);
-            const center = this.sense(ant.x, ant.y, ant.angle, 0);
-            const right = this.sense(ant.x, ant.y, ant.angle, senseAngle);
+            if (ant.state === 'EXPLORING') {
+              // Sense pheromone to bias toward trails (but still explore)
+              const left = this.sense(ant.x, ant.y, ant.angle, -senseAngle);
+              const center = this.sense(ant.x, ant.y, ant.angle, 0);
+              const right = this.sense(ant.x, ant.y, ant.angle, senseAngle);
 
-            if (center >= left && center >= right) {
-              ant.angle += (Math.random() - 0.5) * this.params.wander;
-            } else if (left > right) {
-              ant.angle -= turnRate;
-            } else {
-              ant.angle += turnRate;
-            }
+              // If there's a strong trail, follow it
+              if (center > 5 || left > 5 || right > 5) {
+                if (left > center && left > right) {
+                  ant.angle -= turnRate;
+                } else if (right > center && right > left) {
+                  ant.angle += turnRate;
+                }
+              }
 
-            const toTarget = Math.atan2(target.y - ant.y, target.x - ant.x);
-            let angleDiff = toTarget - ant.angle;
-            while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-            while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-            ant.angle += angleDiff * 0.025;
+              // Add random wandering for exploration
+              ant.angle += (Math.random() - 0.5) * this.params.wander * 1.5;
 
-            ant.x += Math.cos(ant.angle) * speed;
-            ant.y += Math.sin(ant.angle) * speed;
+            } else if (ant.state === 'RETURNING') {
+              // Head back to nest while laying strong pheromone trail
+              const toNest = Math.atan2(this.nestPos.y - ant.y, this.nestPos.x - ant.x);
+              let angleDiff = toNest - ant.angle;
+              while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+              while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+              ant.angle += angleDiff * 0.15;
+              ant.angle += (Math.random() - 0.5) * this.params.wander * 0.3;
 
-            if (ant.x < 0 || ant.x >= w || ant.y < 0 || ant.y >= h) {
-              ant.angle += Math.PI;
-              ant.x = Math.max(0, Math.min(w - 1, ant.x));
-              ant.y = Math.max(0, Math.min(h - 1, ant.y));
-            }
+              // Deposit strong pheromone trail
+              const px = Math.floor(ant.x), py = Math.floor(ant.y);
+              if (px >= 0 && px < w && py >= 0 && py < h) {
+                const depositAmt = this.params.deposit * 2;
+                this.pheromone[py * w + px] += depositAmt;
+                // Widen the trail slightly
+                if (px > 0) this.pheromone[py * w + px - 1] += depositAmt * 0.4;
+                if (px < w - 1) this.pheromone[py * w + px + 1] += depositAmt * 0.4;
+                if (py > 0) this.pheromone[(py - 1) * w + px] += depositAmt * 0.4;
+                if (py < h - 1) this.pheromone[(py + 1) * w + px] += depositAmt * 0.4;
+              }
 
-            const depositAmt = ant.hasFood ? this.params.deposit * 1.5 : this.params.deposit;
-            const px = Math.floor(ant.x), py = Math.floor(ant.y);
-            if (px >= 0 && px < w && py >= 0 && py < h) {
-              this.pheromone[py * w + px] += depositAmt;
-              if (px > 0) this.pheromone[py * w + px - 1] += depositAmt * 0.3;
-              if (px < w - 1) this.pheromone[py * w + px + 1] += depositAmt * 0.3;
-              if (py > 0) this.pheromone[(py - 1) * w + px] += depositAmt * 0.3;
-              if (py < h - 1) this.pheromone[(py + 1) * w + px] += depositAmt * 0.3;
-            }
-
-            if (!ant.hasFood) {
-              for (const food of this.foodSources) {
-                const dx = ant.x - food.x, dy = ant.y - food.y;
-                if (dx * dx + dy * dy < food.radius * food.radius) {
-                  ant.hasFood = true;
-                  ant.targetFood = food;
-                  ant.angle += Math.PI;
-                  break;
+              // RECRUITMENT: Check for contact with exploring ants
+              for (const other of this.ants) {
+                if (other === ant || other.state !== 'EXPLORING') continue;
+                const dx = other.x - ant.x;
+                const dy = other.y - ant.y;
+                const distSq = dx * dx + dy * dy;
+                if (distSq < contactRadius * contactRadius) {
+                  // Recruited! Point toward food and follow trail
+                  other.angle = Math.atan2(this.foodPos.y - other.y, this.foodPos.x - other.x);
+                  other.angle += (Math.random() - 0.5) * 0.3;
                 }
               }
             }
 
-            if (ant.hasFood) {
-              const dxN = ant.x - this.nestPos.x, dyN = ant.y - this.nestPos.y;
-              if (dxN * dxN + dyN * dyN < 400) {
+            // Move
+            ant.x += Math.cos(ant.angle) * speed;
+            ant.y += Math.sin(ant.angle) * speed;
+
+            // Bounce off walls
+            if (ant.x < 5) { ant.x = 5; ant.angle = Math.PI - ant.angle; }
+            if (ant.x > w - 5) { ant.x = w - 5; ant.angle = Math.PI - ant.angle; }
+            if (ant.y < 5) { ant.y = 5; ant.angle = -ant.angle; }
+            if (ant.y > h - 5) { ant.y = h - 5; ant.angle = -ant.angle; }
+
+            // Check if exploring ant found food
+            if (ant.state === 'EXPLORING') {
+              const dx = ant.x - this.foodPos.x;
+              const dy = ant.y - this.foodPos.y;
+              if (dx * dx + dy * dy < this.foodRadius * this.foodRadius) {
+                ant.state = 'RETURNING';
+                ant.hasFood = true;
+                ant.angle += Math.PI; // Turn around
+              }
+            }
+
+            // Check if returning ant reached home
+            if (ant.state === 'RETURNING') {
+              const dx = ant.x - this.nestPos.x;
+              const dy = ant.y - this.nestPos.y;
+              if (dx * dx + dy * dy < 400) {
+                // Delivered food!
+                this.totalDelivered++;
+                ant.state = 'EXPLORING';
                 ant.hasFood = false;
-                ant.angle += Math.PI;
+                ant.angle += Math.PI; // Turn around to go back out
               }
             }
           }
@@ -906,70 +961,150 @@
 
         draw() {
           const ctx = this.ctx;
+          const tCtx = this.trailCtx;
           const w = this.w, h = this.h;
-          const data = this.pheromoneImg.data;
-          let trailDensity = 0;
 
-          for (let i = 0; i < w * h; i++) {
-            const v = Math.min(1, this.pheromone[i] / 40);
-            if (v > 0.02) trailDensity++;
+          // Fade the trail canvas slightly each frame
+          tCtx.fillStyle = 'rgba(15, 14, 11, 0.03)';
+          tCtx.fillRect(0, 0, w, h);
 
-            let r, g, b;
-            if (v < 0.15) {
-              r = v * 200; g = v * 80; b = v * 300;
-            } else if (v < 0.4) {
-              const t = (v - 0.15) / 0.25;
-              r = 30 + t * 70; g = 12 + t * 60; b = 45 + t * 20;
-            } else if (v < 0.7) {
-              const t = (v - 0.4) / 0.3;
-              r = 100 + t * 140; g = 72 + t * 80; b = 65 - t * 30;
-            } else {
-              const t = (v - 0.7) / 0.3;
-              r = 240 + t * 15; g = 152 + t * 80; b = 35 + t * 60;
+          // Draw line trails for returning ants (pheromone lines)
+          for (const ant of this.ants) {
+            if (ant.state === 'RETURNING') {
+              // Strong visible trail line
+              const intensity = Math.min(1, this.params.deposit / 10);
+              tCtx.strokeStyle = `rgba(230, 170, 0, ${0.3 * intensity})`;
+              tCtx.lineWidth = 2;
+              tCtx.beginPath();
+              tCtx.moveTo(ant.prevX, ant.prevY);
+              tCtx.lineTo(ant.x, ant.y);
+              tCtx.stroke();
             }
-
-            data[i * 4] = r;
-            data[i * 4 + 1] = g;
-            data[i * 4 + 2] = b;
-            data[i * 4 + 3] = 255;
           }
-          ctx.putImageData(this.pheromoneImg, 0, 0);
 
+          // Draw the trail canvas as background
+          ctx.drawImage(this.trailCanvas, 0, 0);
+
+          // Overlay pheromone field as subtle heat
+          const imgData = ctx.getImageData(0, 0, w, h);
+          const data = imgData.data;
+          for (let i = 0; i < w * h; i++) {
+            const v = Math.min(1, this.pheromone[i] / 50);
+            if (v > 0.02) {
+              const idx = i * 4;
+              data[idx] = Math.min(255, data[idx] + v * 120);
+              data[idx + 1] = Math.min(255, data[idx + 1] + v * 80);
+              data[idx + 2] = Math.min(255, data[idx + 2] + v * 20);
+            }
+          }
+          ctx.putImageData(imgData, 0, 0);
+
+          // Draw nest (home)
           ctx.beginPath();
-          ctx.arc(this.nestPos.x, this.nestPos.y, 16, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(102, 252, 241, 0.25)';
+          ctx.arc(this.nestPos.x, this.nestPos.y, 18, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(85, 107, 47, 0.3)';
           ctx.fill();
-          ctx.strokeStyle = 'rgba(102, 252, 241, 0.5)';
-          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = 'rgba(85, 107, 47, 0.7)';
+          ctx.lineWidth = 2;
           ctx.stroke();
+          ctx.fillStyle = 'rgba(85, 107, 47, 0.9)';
+          ctx.font = '10px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('HOME', this.nestPos.x, this.nestPos.y + 30);
 
-          for (const food of this.foodSources) {
-            ctx.beginPath();
-            ctx.arc(food.x, food.y, food.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(226, 75, 74, 0.3)';
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(226, 75, 74, 0.6)';
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-          }
+          // Draw food source
+          ctx.beginPath();
+          ctx.arc(this.foodPos.x, this.foodPos.y, this.foodRadius, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(230, 170, 0, 0.3)';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(230, 170, 0, 0.7)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(230, 170, 0, 0.9)';
+          ctx.fillText('FOOD', this.foodPos.x, this.foodPos.y + 35);
 
+          // Draw ants
           let onTrail = 0, carrying = 0;
           for (const ant of this.ants) {
             const px = Math.floor(ant.x), py = Math.floor(ant.y);
             if (px >= 0 && px < w && py >= 0 && py < h) {
-              if (this.pheromone[py * w + px] > 5) onTrail++;
+              if (this.pheromone[py * w + px] > 3) onTrail++;
             }
             if (ant.hasFood) carrying++;
 
-            ctx.beginPath();
-            ctx.arc(ant.x, ant.y, ant.hasFood ? 3 : 2.5, 0, Math.PI * 2);
-            ctx.fillStyle = ant.hasFood ? 'rgba(239, 159, 39, 0.9)' : 'rgba(200, 200, 200, 0.6)';
-            ctx.fill();
+            this.drawAnt(ctx, ant);
+          }
+
+          // Count trail density
+          let trailDensity = 0;
+          for (let i = 0; i < w * h; i++) {
+            if (this.pheromone[i] > 2) trailDensity++;
           }
 
           document.getElementById('stat-ontrail').textContent = onTrail;
           document.getElementById('stat-carrying').textContent = carrying;
+          document.getElementById('stat-delivered').textContent = this.totalDelivered;
           document.getElementById('stat-density').textContent = ((trailDensity / (w * h)) * 100).toFixed(1) + '%';
+        },
+
+        drawAnt(ctx, ant) {
+          const a = ant.angle;
+          const isCarrying = ant.hasFood;
+          ctx.save();
+          ctx.translate(ant.x, ant.y);
+          ctx.rotate(a);
+
+          const bodyColor = isCarrying ? '#8B5A2B' : '#3a2a1a';
+
+          // Body segments
+          ctx.fillStyle = bodyColor;
+          // Abdomen
+          ctx.beginPath();
+          ctx.ellipse(-4, 0, 3, 2, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Thorax
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 2, 1.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Head
+          ctx.beginPath();
+          ctx.ellipse(3, 0, 1.5, 1.2, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Food morsel if carrying
+          if (isCarrying) {
+            ctx.fillStyle = '#E6AA00';
+            ctx.beginPath();
+            ctx.arc(5, -1, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Legs
+          ctx.strokeStyle = 'rgba(58, 42, 26, 0.6)';
+          ctx.lineWidth = 0.5;
+          for (let i = -1; i <= 1; i++) {
+            const lx = i * 1.5;
+            ctx.beginPath();
+            ctx.moveTo(lx, 1);
+            ctx.lineTo(lx + 2, 3.5);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(lx, -1);
+            ctx.lineTo(lx + 2, -3.5);
+            ctx.stroke();
+          }
+
+          // Antennae
+          ctx.beginPath();
+          ctx.moveTo(4, 0.5);
+          ctx.lineTo(6, 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(4, -0.5);
+          ctx.lineTo(6, -2);
+          ctx.stroke();
+
+          ctx.restore();
         },
 
         loop() {
@@ -1108,9 +1243,9 @@
             const v = Math.min(1, this.trail[i] / 20);
             if (this.trail[i] > 0.5) networkCells++;
 
-            const r = v * 40;
-            const g = v * 200 + (1 - v) * 5;
-            const b = v * 160;
+            const r = v * 60;
+            const g = v * 160 + (1 - v) * 5;
+            const b = v * 80;
 
             data[i * 4] = r;
             data[i * 4 + 1] = g;
@@ -1193,7 +1328,7 @@
         draw() {
           const ctx = this.ctx;
           const w = this.canvas.width, h = this.canvas.height;
-          ctx.fillStyle = '#000';
+          ctx.fillStyle = '#0F0E0B';
           ctx.fillRect(0, 0, w, h);
           this.stats = { trunk: 0, canopy: 0, roots: 0 };
 
@@ -1202,7 +1337,7 @@
           const angleRad = this.params.angle * Math.PI / 180;
           const seasonColors = this.getSeasonColors();
 
-          ctx.strokeStyle = 'rgba(102, 252, 241, 0.08)';
+          ctx.strokeStyle = 'rgba(230, 170, 0, 0.08)';
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(0, groundY);
@@ -1315,7 +1450,7 @@
         draw() {
           const ctx = this.ctx;
           const w = this.canvas.width, h = this.canvas.height;
-          ctx.fillStyle = '#000';
+          ctx.fillStyle = '#0F0E0B';
           ctx.fillRect(0, 0, w, h);
 
           this.segments = 0;
@@ -1334,9 +1469,9 @@
           const endY = y + Math.sin(angle) * length;
 
           const t = 1 - depth / this.params.depth;
-          const r = Math.floor(30 + t * 60);
-          const g = Math.floor(120 + t * 132);
-          const b = Math.floor(110 + t * 131);
+          const r = Math.floor(60 + t * 140);
+          const g = Math.floor(50 + t * 100);
+          const b = Math.floor(20 + t * 30);
           const alpha = 0.35 + (depth / this.params.depth) * 0.55;
 
           ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(2)})`;
@@ -1406,7 +1541,7 @@
         drawVascular() {
           const ctx = this.ctxVasc;
           const w = this.canvasVasc.width, h = this.canvasVasc.height;
-          ctx.fillStyle = '#000';
+          ctx.fillStyle = '#0F0E0B';
           ctx.fillRect(0, 0, w, h);
           this.stats.vessels = 0; this.stats.terminals = 0;
           const startLength = h * 0.2;
@@ -1419,7 +1554,7 @@
             this.stats.terminals++;
             ctx.beginPath();
             ctx.arc(x, y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(226, 75, 74, 0.35)';
+            ctx.fillStyle = 'rgba(198, 142, 23, 0.35)';
             ctx.fill();
             return;
           }
@@ -1459,7 +1594,7 @@
         drawCantor() {
           const ctx = this.ctxCantor;
           const w = this.canvasCantor.width, h = this.canvasCantor.height;
-          ctx.fillStyle = '#000';
+          ctx.fillStyle = '#0F0E0B';
           ctx.fillRect(0, 0, w, h);
 
           const ratio = this.getBifurcationRatio();
@@ -1471,9 +1606,9 @@
         drawCantorRow(ctx, x, y, width, ratio, depth, rowHeight) {
           if (depth <= 0 || width < 1) return;
           const t = 1 - depth / this.params.depth;
-          const r = Math.floor(40 + t * 60);
-          const g = Math.floor(140 + t * 112);
-          const b = Math.floor(120 + t * 121);
+          const r = Math.floor(60 + t * 140);
+          const g = Math.floor(50 + t * 100);
+          const b = Math.floor(20 + t * 30);
           ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.75)`;
           ctx.fillRect(x, y, width, rowHeight * 0.6);
 
@@ -1525,6 +1660,29 @@
       window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => initSimulation(currentSim), 200);
+      });
+
+      // Listen for pause/resume messages from parent page (Intersection Observer)
+      let isPaused = false;
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'pause') {
+          isPaused = true;
+          if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+          }
+        } else if (e.data && e.data.type === 'resume') {
+          if (isPaused) {
+            isPaused = false;
+            // Restart the current simulation's loop
+            switch (currentSim) {
+              case 'swarm': if (!prefersReducedMotion) swarm.loop(); break;
+              case 'ants': if (!prefersReducedMotion) ants.loop(); break;
+              case 'slime': if (!prefersReducedMotion) slime.loop(); break;
+              case 'vascular': if (!prefersReducedMotion && vascular.params.pulse > 0) vascular.pulseLoop(); break;
+            }
+          }
+        }
       });
 
       initSimulation('swarm');
