@@ -13,7 +13,7 @@ import HeroParallax from './components/HeroParallax.jsx';
 import About from './pages/About.jsx';
 import BranchingSection from './components/BranchingSection.jsx';
 import HorizontalGallery from './components/HorizontalGallery.jsx';
-import Experiments from './pages/Experiments.jsx';
+import HorizontalLabGallery from './components/HorizontalLabGallery.jsx';
 import Blog from './pages/Blog.jsx';
 import Contact from './pages/Contact.jsx';
 
@@ -54,7 +54,7 @@ function App() {
         
         <HorizontalGallery />
         
-        <Section id="experiments"><Experiments /></Section>
+        <HorizontalLabGallery />
         <Section id="blog"><Blog /></Section>
         <Section id="contact"><Contact /></Section>
       </MainFlow>
