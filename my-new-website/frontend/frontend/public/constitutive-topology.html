@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constitutive Topology</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #08080a;
+  color: #c8c4b8;
+  font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+#canvas-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+
+canvas { display: block; cursor: grab; }
+canvas:active { cursor: grabbing; }
+
+.title-block {
+  position: fixed;
+  top: 28px;
+  left: 32px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.title-block h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: #e8e4d8;
+  letter-spacing: -0.5px;
+  margin-bottom: 5px;
+}
+
+.title-block p {
+  font-size: 10px;
+  font-weight: 300;
+  color: #5a574e;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  line-height: 1.7;
+}
+
+.info-panel {
+  position: fixed;
+  bottom: 28px;
+  left: 32px;
+  z-index: 10;
+  max-width: 400px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.info-panel.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.info-panel .level-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  color: #e8e4d8;
+  margin-bottom: 3px;
+}
+
+.info-panel .domain-name {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.info-panel .detail {
+  font-size: 11.5px;
+  font-weight: 300;
+  color: #7a776e;
+  line-height: 1.7;
+}
+
+.info-panel .coupling-note {
+  font-size: 10px;
+  font-weight: 300;
+  color: #5a574e;
+  line-height: 1.6;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-style: italic;
+}
+
+.legend {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 9.5px;
+  font-weight: 300;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #5a574e;
+}
+
+.legend-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.controls {
+  position: fixed;
+  bottom: 28px;
+  right: 32px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.controls button {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #6a675e;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.controls button:hover {
+  background: rgba(255,255,255,0.06);
+  color: #b8b4a8;
+}
+
+.controls button.active {
+  border-color: rgba(255,255,255,0.15);
+  color: #e8e4d8;
+  background: rgba(255,255,255,0.04);
+}
+
+.controls button.ai-btn {
+  margin-top: 8px;
+  border-color: rgba(239,159,39,0.15);
+  color: #8a7040;
+}
+
+.controls button.ai-btn:hover {
+  border-color: rgba(239,159,39,0.3);
+  color: #c8a050;
+  background: rgba(239,159,39,0.04);
+}
+
+.controls button.ai-btn.active {
+  border-color: rgba(239,159,39,0.5);
+  color: #e8c070;
+  background: rgba(239,159,39,0.06);
+  box-shadow: 0 0 20px rgba(239,159,39,0.06);
+}
+
+.flow-legend {
+  position: fixed;
+  bottom: 100px;
+  right: 32px;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.flow-legend.visible { opacity: 1; }
+
+.flow-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  color: #5a574e;
+}
+
+.flow-legend-dot {
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.grain {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+.ai-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  pointer-events: none;
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(239,159,39,0.35);
+  text-align: center;
+  line-height: 1.8;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  max-width: 340px;
+}
+
+.ai-overlay.visible { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<div class="title-block">
+  <h1>Constitutive topology</h1>
+  <p>Agentic relations across domains<br>mapped on a toroidal manifold</p>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="info-panel" id="info-panel">
+  <div class="level-name" id="info-level"></div>
+  <div class="domain-name" id="info-domain"></div>
+  <div class="detail" id="info-detail"></div>
+  <div class="coupling-note" id="info-coupling"></div>
+</div>
+
+<div class="flow-legend" id="flow-legend">
+  <div class="flow-legend-item"><div class="flow-legend-dot" style="background:#7F77DD;"></div>Constitutive (downward)</div>
+  <div class="flow-legend-item"><div class="flow-legend-dot" style="background:rgba(255,255,255,0.5);"></div>Modification (upward)</div>
+</div>
+
+<div class="controls">
+  <button class="active" onclick="setView('constitution')">Constitution</button>
+  <button onclick="setView('coupling')">Coupling</button>
+  <button onclick="setView('all')">Full mesh</button>
+  <button class="ai-btn" onclick="toggleAI()">AI insertion</button>
+</div>
+
+<div class="ai-overlay" id="ai-overlay">
+  One agent at the operational-computational node<br>
+  radiates constitutive consequence across<br>
+  every coupled domain
+</div>
+
+<div id="canvas-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// === PAUSE/RESUME SUPPORT (for iframe embedding) ===
+let isPaused = false;
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'pause') isPaused = true;
+  if (e.data && e.data.type === 'resume') isPaused = false;
+});
+
+const domains = [
+  { name: 'Political', color: 0x7F77DD, hex: '#7F77DD' },
+  { name: 'Biological', color: 0x1D9E75, hex: '#1D9E75' },
+  { name: 'Computational', color: 0x378ADD, hex: '#378ADD' },
+  { name: 'Musical', color: 0xEF9F27, hex: '#EF9F27' },
+  { name: 'Economic', color: 0xD85A30, hex: '#D85A30' },
+  { name: 'Linguistic', color: 0xD4537E, hex: '#D4537E' }
+];
+
+const levels = [
+  { name: 'Universal / physical', items: [
+    'Territory & population', 'Physical & chemical law', 'Math & logic',
+    'Acoustic physics', 'Scarcity & exchange', 'Cognitive architecture'
+  ], couplings: [
+    'All domains share a physical substrate — acoustic physics constrains musical possibility, cognitive architecture constrains linguistic and political possibility.'
+  ]},
+  { name: 'Global order', items: [
+    'International law', 'Genetic code', 'Hardware ISA',
+    'Tuning systems', 'Monetary abstraction', 'Language families'
+  ], couplings: [
+    'International law and monetary systems are tightly coupled (Bretton Woods, trade law). The genetic code and hardware ISA are structural analogues: both frozen accidents constraining everything above.'
+  ]},
+  { name: 'Regional / systemic', items: [
+    'Regional blocs (AU, EU)', 'Regulatory systems', 'Operating system',
+    'Modal / tonal grammar', 'Market structure', 'Specific language'
+  ], couplings: [
+    'Regional political blocs and market structures are deeply coupled (EU single market, AU free trade area). OS design is shaped by the economic model it serves.'
+  ]},
+  { name: 'Constitutional', items: [
+    'National constitution', 'Organism architecture', 'Runtime / VM',
+    'Genre conventions', 'Corporate charter', 'Dialect / register'
+  ], couplings: [
+    'National constitutions and corporate charters are coupled — corporate personhood is a constitutional artefact. Genre conventions and dialect registers both function as social-identity markers.'
+  ]},
+  { name: 'Institutional', items: [
+    'Statutory law', 'Organs & tissues', 'App frameworks',
+    'Ensemble structure', 'Divisions & depts', 'Discourse conventions'
+  ], couplings: [
+    'Institutional law shapes corporate divisions (employment law, compliance). Application frameworks mediate institutional activity. Ensemble structure and corporate division share functional-specialisation isomorphism.'
+  ]},
+  { name: 'Operational', items: [
+    'Local governance', 'Cells', 'Software agents',
+    'Individual voices', 'Workers & transactions', 'Utterances'
+  ], couplings: [
+    'Software agents increasingly mediate economic transactions and political operations. This is the level where AI capability is being inserted — and where constitutive mismatch becomes critical.'
+  ]},
+  { name: 'Elemental', items: [
+    'Citizens', 'Molecular machinery', 'Subroutines',
+    'Notes & timbres', 'Individual exchange', 'Phonemes'
+  ], couplings: [
+    'All domains converge on discrete events within a constitutive grammar. The cybernetic whole closes here: elemental action propagates upward, potentially reconstituting the abstractions that gave it meaning.'
+  ]}
+];
+
+// Coupling strength matrix (6x6, symmetric, 0-1)
+// Order: Political, Biological, Computational, Musical, Economic, Linguistic
+const couplingStrength = [
+  [0, 0.3, 0.6, 0.2, 0.9, 0.7],  // Political
+  [0.3, 0, 0.5, 0.3, 0.3, 0.2],  // Biological
+  [0.6, 0.5, 0, 0.4, 0.8, 0.6],  // Computational
+  [0.2, 0.3, 0.4, 0, 0.3, 0.7],  // Musical
+  [0.9, 0.3, 0.8, 0.3, 0, 0.5],  // Economic
+  [0.7, 0.2, 0.6, 0.7, 0.5, 0],  // Linguistic
+];
+
+const R = 4.0;
+const r = 1.8;
+const nDomains = 6;
+const nLevels = 7;
+
+function torusPoint(u, v) {
+  const x = (R + r * Math.cos(v)) * Math.cos(u);
+  const y = r * Math.sin(v);
+  const z = (R + r * Math.cos(v)) * Math.sin(u);
+  return new THREE.Vector3(x, y, z);
+}
+
+// Scene
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 5.5, 11);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x08080a, 1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+const mainGroup = new THREE.Group();
+scene.add(mainGroup);
+
+// Ambient wireframe torus
+const torusGeo = new THREE.TorusGeometry(R, r, 56, 80);
+const torusWire = new THREE.LineSegments(
+  new THREE.WireframeGeometry(torusGeo),
+  new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.018, transparent: true })
+);
+mainGroup.add(torusWire);
+
+// Grid points
+const gridPoints = [];
+const spheres = [];
+const glowSpheres = [];
+const raycaster = new THREE.Raycaster();
+raycaster.params.Points = { threshold: 0.2 };
+const mouse = new THREE.Vector2(-999, -999);
+
+for (let li = 0; li < nLevels; li++) {
+  gridPoints[li] = [];
+  for (let di = 0; di < nDomains; di++) {
+    const u = (di / nDomains) * Math.PI * 2;
+    const v = (li / nLevels) * Math.PI * 2;
+    const pos = torusPoint(u, v);
+    gridPoints[li][di] = pos;
+
+    const geo = new THREE.SphereGeometry(0.095, 14, 14);
+    const mat = new THREE.MeshBasicMaterial({ color: domains[di].color, transparent: true, opacity: 0.92 });
+    const sphere = new THREE.Mesh(geo, mat);
+    sphere.position.copy(pos);
+    sphere.userData = { level: li, domain: di, baseOpacity: 0.92, targetOpacity: 0.92, targetScale: 1 };
+    mainGroup.add(sphere);
+    spheres.push(sphere);
+
+    // Glow
+    const gGeo = new THREE.SphereGeometry(0.24, 8, 8);
+    const gMat = new THREE.MeshBasicMaterial({ color: domains[di].color, transparent: true, opacity: 0.1 });
+    const glow = new THREE.Mesh(gGeo, gMat);
+    glow.position.copy(pos);
+    glow.userData = { baseOpacity: 0.1, targetOpacity: 0.1 };
+    mainGroup.add(glow);
+    glowSpheres.push(glow);
+  }
+}
+
+// Constitution lines (domain meridians)
+const constitutionLines = new THREE.Group();
+for (let di = 0; di < nDomains; di++) {
+  const pts = [];
+  for (let li = 0; li <= nLevels; li++) {
+    const u = (di / nDomains) * Math.PI * 2;
+    const v = ((li % nLevels) / nLevels) * Math.PI * 2;
+    pts.push(torusPoint(u, v));
+  }
+  const curve = new THREE.CatmullRomCurve3(pts, false);
+  const curvePoints = curve.getPoints(70);
+  const geo = new THREE.BufferGeometry().setFromPoints(curvePoints);
+  const mat = new THREE.LineBasicMaterial({ color: domains[di].color, opacity: 0.3, transparent: true });
+  const line = new THREE.Line(geo, mat);
+  line.userData = { domain: di };
+  constitutionLines.add(line);
+}
+mainGroup.add(constitutionLines);
+
+// Coupling lines (level latitudes) with variable intensity
+const couplingLineGroup = new THREE.Group();
+const couplingLineData = [];
+
+for (let li = 0; li < nLevels; li++) {
+  for (let di = 0; di < nDomains; di++) {
+    const di2 = (di + 1) % nDomains;
+    const strength = couplingStrength[di][di2];
+    const p1 = gridPoints[li][di];
+    const p2 = gridPoints[li][di2];
+    
+    // Interpolate along torus surface
+    const pts = [];
+    const steps = 20;
+    for (let s = 0; s <= steps; s++) {
+      const t = s / steps;
+      const uMix = ((di + t) / nDomains) * Math.PI * 2;
+      const vv = (li / nLevels) * Math.PI * 2;
+      pts.push(torusPoint(uMix, vv));
+    }
+    
+    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+    const mat = new THREE.LineBasicMaterial({
+      color: 0xffffff,
+      opacity: 0.05 + strength * 0.2,
+      transparent: true,
+      linewidth: 1
+    });
+    const line = new THREE.Line(geo, mat);
+    line.userData = { level: li, d1: di, d2: di2, strength, baseOpacity: 0.05 + strength * 0.2 };
+    couplingLineGroup.add(line);
+    couplingLineData.push(line);
+  }
+}
+mainGroup.add(couplingLineGroup);
+couplingLineGroup.visible = false;
+
+// === PARTICLES ===
+// Constitutive particles (domain-colored, steady downward flow)
+const constParticleCount = 150;
+const constPositions = new Float32Array(constParticleCount * 3);
+const constColors = new Float32Array(constParticleCount * 3);
+const constTs = [];
+const constDomains = [];
+const constSpeeds = [];
+
+for (let i = 0; i < constParticleCount; i++) {
+  const di = Math.floor(Math.random() * nDomains);
+  constDomains.push(di);
+  constTs.push(Math.random());
+  constSpeeds.push(0.0004 + Math.random() * 0.0008);
+  const col = new THREE.Color(domains[di].color);
+  constColors[i * 3] = col.r;
+  constColors[i * 3 + 1] = col.g;
+  constColors[i * 3 + 2] = col.b;
+}
+
+const constGeo = new THREE.BufferGeometry();
+constGeo.setAttribute('position', new THREE.BufferAttribute(constPositions, 3));
+constGeo.setAttribute('color', new THREE.BufferAttribute(constColors, 3));
+const constMat = new THREE.PointsMaterial({
+  size: 0.055,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.65,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+const constParticles = new THREE.Points(constGeo, constMat);
+mainGroup.add(constParticles);
+
+// Modification particles (white/silver, burst upward, opposite direction)
+const modParticleCount = 60;
+const modPositions = new Float32Array(modParticleCount * 3);
+const modColors = new Float32Array(modParticleCount * 3);
+const modTs = [];
+const modDomains = [];
+const modSpeeds = [];
+const modBurstPhase = []; // each particle has a burst timer
+
+for (let i = 0; i < modParticleCount; i++) {
+  const di = Math.floor(Math.random() * nDomains);
+  modDomains.push(di);
+  modTs.push(Math.random());
+  modSpeeds.push(0);  // start inactive
+  modBurstPhase.push(Math.random() * 6);  // stagger bursts
+  // Silver/white with slight domain tint
+  const domCol = new THREE.Color(domains[di].color);
+  const white = new THREE.Color(0xd8d4c8);
+  white.lerp(domCol, 0.15);
+  modColors[i * 3] = white.r;
+  modColors[i * 3 + 1] = white.g;
+  modColors[i * 3 + 2] = white.b;
+}
+
+const modGeo = new THREE.BufferGeometry();
+modGeo.setAttribute('position', new THREE.BufferAttribute(modPositions, 3));
+modGeo.setAttribute('color', new THREE.BufferAttribute(modColors, 3));
+const modMat = new THREE.PointsMaterial({
+  size: 0.045,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.5,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+const modParticles = new THREE.Points(modGeo, modMat);
+mainGroup.add(modParticles);
+
+// === AI INSERTION MODE ===
+let aiMode = false;
+const aiNodeLevel = 5; // Operational
+const aiNodeDomain = 2; // Computational
+let aiPulseTime = 0;
+
+// AI radiation lines (from operational-computational to all other domains at that level)
+const aiLines = new THREE.Group();
+const aiLineData = [];
+for (let di = 0; di < nDomains; di++) {
+  if (di === aiNodeDomain) continue;
+  const p1 = gridPoints[aiNodeLevel][aiNodeDomain];
+  const p2 = gridPoints[aiNodeLevel][di];
+  
+  // Create arc through space (slightly above torus surface)
+  const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+  const normal = mid.clone().normalize().multiplyScalar(0.8);
+  mid.add(normal);
+  
+  const curve = new THREE.QuadraticBezierCurve3(p1, mid, p2);
+  const pts = curve.getPoints(30);
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const strength = couplingStrength[aiNodeDomain][di];
+  const mat = new THREE.LineBasicMaterial({
+    color: 0xEF9F27,
+    opacity: 0,
+    transparent: true
+  });
+  const line = new THREE.Line(geo, mat);
+  line.userData = { targetDomain: di, strength };
+  aiLines.add(line);
+  aiLineData.push(line);
+}
+
+// Also add vertical radiation lines (up and down from the AI node)
+for (let li = 0; li < nLevels; li++) {
+  if (li === aiNodeLevel) continue;
+  const p1 = gridPoints[aiNodeLevel][aiNodeDomain];
+  const p2 = gridPoints[li][aiNodeDomain];
+  const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+  const normal = mid.clone().normalize().multiplyScalar(0.4);
+  mid.add(normal);
+  
+  const curve = new THREE.QuadraticBezierCurve3(p1, mid, p2);
+  const pts = curve.getPoints(20);
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const mat = new THREE.LineBasicMaterial({
+    color: 0xEF9F27,
+    opacity: 0,
+    transparent: true
+  });
+  const line = new THREE.Line(geo, mat);
+  line.userData = { targetLevel: li, strength: 0.6 };
+  aiLines.add(line);
+  aiLineData.push(line);
+}
+
+mainGroup.add(aiLines);
+
+// AI glow sphere
+const aiGlowGeo = new THREE.SphereGeometry(0.5, 16, 16);
+const aiGlowMat = new THREE.MeshBasicMaterial({
+  color: 0xEF9F27,
+  transparent: true,
+  opacity: 0
+});
+const aiGlow = new THREE.Mesh(aiGlowGeo, aiGlowMat);
+aiGlow.position.copy(gridPoints[aiNodeLevel][aiNodeDomain]);
+mainGroup.add(aiGlow);
+
+// === VIEW STATE ===
+let currentView = 'constitution';
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll('.controls button:not(.ai-btn)').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  constitutionLines.visible = view === 'constitution' || view === 'all';
+  couplingLineGroup.visible = view === 'coupling' || view === 'all';
+  
+  document.getElementById('flow-legend').classList.toggle('visible', view === 'constitution' || view === 'all');
+  
+  constitutionLines.children.forEach(l => {
+    l.material.opacity = view === 'all' ? 0.18 : 0.3;
+  });
+}
+
+function toggleAI() {
+  aiMode = !aiMode;
+  document.querySelector('.ai-btn').classList.toggle('active', aiMode);
+  document.getElementById('ai-overlay').classList.toggle('visible', aiMode);
+}
+
+// === MOUSE INTERACTION ===
+let isDragging = false;
+let prevMouse = { x: 0, y: 0 };
+let rotationY = 0;
+let rotationX = 0.3;
+let targetRotY = 0;
+let targetRotX = 0.3;
+let autoRotate = true;
+let autoRotateTimeout;
+let selectedNode = null;
+
+renderer.domElement.addEventListener('mousedown', e => {
+  isDragging = true;
+  prevMouse = { x: e.clientX, y: e.clientY };
+  autoRotate = false;
+  clearTimeout(autoRotateTimeout);
+});
+
+renderer.domElement.addEventListener('mousemove', e => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  
+  if (isDragging) {
+    const dx = e.clientX - prevMouse.x;
+    const dy = e.clientY - prevMouse.y;
+    targetRotY += dx * 0.005;
+    targetRotX += dy * 0.004;
+    targetRotX = Math.max(-1.0, Math.min(1.0, targetRotX));
+    prevMouse = { x: e.clientX, y: e.clientY };
+  }
+});
+
+renderer.domElement.addEventListener('mouseup', () => {
+  isDragging = false;
+  autoRotateTimeout = setTimeout(() => { autoRotate = true; }, 4000);
+});
+
+renderer.domElement.addEventListener('click', e => {
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(spheres);
+  if (intersects.length > 0) {
+    const obj = intersects[0].object;
+    selectedNode = (selectedNode === obj) ? null : obj;
+    updateInfoPanel();
+  } else {
+    selectedNode = null;
+    updateInfoPanel();
+  }
+});
+
+renderer.domElement.addEventListener('wheel', e => {
+  camera.position.z += e.deltaY * 0.008;
+  camera.position.z = Math.max(5, Math.min(18, camera.position.z));
+  camera.position.y = camera.position.z * 0.5;
+  camera.lookAt(0, 0, 0);
+}, { passive: true });
+
+// Touch
+renderer.domElement.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    isDragging = true;
+    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    autoRotate = false;
+    clearTimeout(autoRotateTimeout);
+  }
+}, { passive: true });
+
+renderer.domElement.addEventListener('touchmove', e => {
+  if (isDragging && e.touches.length === 1) {
+    const dx = e.touches[0].clientX - prevMouse.x;
+    const dy = e.touches[0].clientY - prevMouse.y;
+    targetRotY += dx * 0.005;
+    targetRotX += dy * 0.004;
+    targetRotX = Math.max(-1.0, Math.min(1.0, targetRotX));
+    prevMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }
+}, { passive: true });
+
+renderer.domElement.addEventListener('touchend', () => {
+  isDragging = false;
+  autoRotateTimeout = setTimeout(() => { autoRotate = true; }, 4000);
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    selectedNode = null;
+    updateInfoPanel();
+  }
+});
+
+// === INFO PANEL ===
+const infoPanel = document.getElementById('info-panel');
+const infoLevel = document.getElementById('info-level');
+const infoDomain = document.getElementById('info-domain');
+const infoDetail = document.getElementById('info-detail');
+const infoCoupling = document.getElementById('info-coupling');
+
+function updateInfoPanel() {
+  if (selectedNode) {
+    const { level, domain } = selectedNode.userData;
+    infoLevel.textContent = levels[level].name;
+    infoDomain.textContent = domains[domain].name;
+    infoDomain.style.color = domains[domain].hex;
+    infoDetail.textContent = levels[level].items[domain];
+    infoCoupling.textContent = levels[level].couplings[0];
+    infoPanel.classList.add('active');
+  } else {
+    infoPanel.classList.remove('active');
+  }
+}
+
+// Legend
+const legendEl = document.getElementById('legend');
+domains.forEach(d => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.innerHTML = `<div class="legend-dot" style="background:${d.hex}"></div>${d.name}`;
+  legendEl.appendChild(item);
+});
+
+document.getElementById('flow-legend').classList.add('visible');
+
+// === ANIMATION ===
+let time = 0;
+
+function interpolateOnTorus(di, t) {
+  const u = (di / nDomains) * Math.PI * 2;
+  const li = t * nLevels;
+  const li0 = Math.floor(li) % nLevels;
+  const li1 = (li0 + 1) % nLevels;
+  const frac = li - Math.floor(li);
+  const v0 = (li0 / nLevels) * Math.PI * 2;
+  const v1 = (li1 / nLevels) * Math.PI * 2;
+  
+  // Smooth interpolation
+  const smooth = frac * frac * (3 - 2 * frac);
+  const v = v0 + (v1 - v0) * smooth;
+  return torusPoint(u, v);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  
+  // Support pause/resume from parent iframe
+  if (isPaused) return;
+  
+  time += 0.016;
+  
+  if (autoRotate) {
+    targetRotY += 0.0008;
+  }
+  
+  rotationY += (targetRotY - rotationY) * 0.04;
+  rotationX += (targetRotX - rotationX) * 0.04;
+  mainGroup.rotation.y = rotationY;
+  mainGroup.rotation.x = rotationX;
+  
+  // === Constitutive particles (steady flow) ===
+  const cPosAttr = constParticles.geometry.attributes.position;
+  for (let i = 0; i < constParticleCount; i++) {
+    constTs[i] += constSpeeds[i];
+    if (constTs[i] > 1) constTs[i] -= 1;
+    const pos = interpolateOnTorus(constDomains[i], constTs[i]);
+    cPosAttr.array[i * 3] = pos.x;
+    cPosAttr.array[i * 3 + 1] = pos.y;
+    cPosAttr.array[i * 3 + 2] = pos.z;
+  }
+  cPosAttr.needsUpdate = true;
+  
+  // === Modification particles (burst upward, opposite direction) ===
+  const mPosAttr = modParticles.geometry.attributes.position;
+  for (let i = 0; i < modParticleCount; i++) {
+    modBurstPhase[i] += 0.016;
+    
+    // Burst pattern: active for 1.5s, dormant for 2-5s
+    const cycle = modBurstPhase[i] % (1.5 + 3 * (i % 3));
+    if (cycle < 1.5) {
+      modSpeeds[i] = 0.002 + Math.random() * 0.001;
+      modTs[i] -= modSpeeds[i]; // opposite direction
+      if (modTs[i] < 0) modTs[i] += 1;
+    }
+    
+    const pos = interpolateOnTorus(modDomains[i], modTs[i]);
+    mPosAttr.array[i * 3] = pos.x;
+    mPosAttr.array[i * 3 + 1] = pos.y;
+    mPosAttr.array[i * 3 + 2] = pos.z;
+  }
+  mPosAttr.needsUpdate = true;
+  
+  // Mod particle opacity: fade during dormant phase
+  modMat.opacity = 0.45;
+  
+  // === Coupling line breathing ===
+  if (couplingLineGroup.visible) {
+    couplingLineData.forEach(line => {
+      const { strength, baseOpacity } = line.userData;
+      const breathe = Math.sin(time * (0.5 + strength * 0.8)) * 0.5 + 0.5;
+      line.material.opacity = baseOpacity * (0.6 + breathe * 0.4);
+    });
+  }
+  
+  // === Node hover/selection effects ===
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(spheres);
+  const hoveredObj = intersects.length > 0 ? intersects[0].object : null;
+  const activeNode = selectedNode || hoveredObj;
+  
+  spheres.forEach((s, idx) => {
+    const sd = s.userData;
+    if (activeNode) {
+      const ad = activeNode.userData;
+      if (s === activeNode) {
+        sd.targetOpacity = 1;
+        sd.targetScale = 2.0;
+      } else if (sd.level === ad.level || sd.domain === ad.domain) {
+        sd.targetOpacity = 0.85;
+        sd.targetScale = 1.3;
+      } else {
+        sd.targetOpacity = 0.12;
+        sd.targetScale = 0.7;
+      }
+    } else {
+      sd.targetOpacity = sd.baseOpacity;
+      sd.targetScale = 1;
+    }
+    
+    // Smooth transitions
+    s.material.opacity += (sd.targetOpacity - s.material.opacity) * 0.08;
+    const cs = s.scale.x;
+    const ts = sd.targetScale;
+    const ns = cs + (ts - cs) * 0.08;
+    s.scale.set(ns, ns, ns);
+    
+    // Glow follows
+    const g = glowSpheres[idx];
+    g.material.opacity += (sd.targetOpacity * 0.12 - g.material.opacity) * 0.08;
+  });
+  
+  // === AI MODE ===
+  if (aiMode) {
+    aiPulseTime += 0.016;
+    const pulse = Math.sin(aiPulseTime * 2) * 0.5 + 0.5;
+    
+    // AI glow
+    aiGlowMat.opacity = 0.08 + pulse * 0.12;
+    aiGlow.scale.set(1 + pulse * 0.5, 1 + pulse * 0.5, 1 + pulse * 0.5);
+    
+    // AI radiation lines
+    aiLineData.forEach(line => {
+      const str = line.userData.strength || 0.5;
+      const staggeredPulse = Math.sin(aiPulseTime * 1.5 + str * 3) * 0.5 + 0.5;
+      line.material.opacity = str * 0.15 + staggeredPulse * str * 0.35;
+    });
+    
+    // Highlight the AI node
+    const aiSphereIdx = aiNodeLevel * nDomains + aiNodeDomain;
+    spheres[aiSphereIdx].material.opacity = 1;
+    spheres[aiSphereIdx].scale.set(2.2 + pulse * 0.3, 2.2 + pulse * 0.3, 2.2 + pulse * 0.3);
+    glowSpheres[aiSphereIdx].material.opacity = 0.2 + pulse * 0.15;
+    
+    // Dim non-coupled nodes
+    if (!activeNode) {
+      spheres.forEach((s, idx) => {
+        const sd = s.userData;
+        if (sd.level === aiNodeLevel || sd.domain === aiNodeDomain) {
+          s.material.opacity = Math.max(s.material.opacity, 0.7 + pulse * 0.2);
+        } else if (idx !== aiSphereIdx) {
+          s.material.opacity = Math.min(s.material.opacity, 0.15);
+        }
+      });
+    }
+  } else {
+    aiGlowMat.opacity += (0 - aiGlowMat.opacity) * 0.05;
+    aiLineData.forEach(line => {
+      line.material.opacity += (0 - line.material.opacity) * 0.05;
+    });
+  }
+  
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

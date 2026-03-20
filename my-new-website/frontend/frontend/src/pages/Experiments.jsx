@@ -1,7 +1,8 @@
 // src/pages/Experiments.jsx
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 const PageContainer = styled(motion.div)`
   max-width: 1200px;
@@ -89,6 +90,26 @@ const EmergenceFrame = styled.iframe`
 `;
 
 const Experiments = () => {
+  const iframeRef = useRef(null);
+  const { ref: observerRef, inView } = useInView({
+    threshold: 0.05,
+    triggerOnce: false,
+  });
+
+  // Pause/resume iframe simulation when scrolling in/out of view
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      iframe.contentWindow.postMessage(
+        { type: inView ? 'resume' : 'pause' },
+        '*'
+      );
+    } catch (e) {
+      // Ignore cross-origin errors
+    }
+  }, [inView]);
+
   return (
     <PageContainer
       initial={{ opacity: 0 }}
@@ -109,6 +130,7 @@ const Experiments = () => {
       </Header>
 
       <FeaturedSection
+        ref={observerRef}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
@@ -125,6 +147,7 @@ const Experiments = () => {
             </FeaturedDescription>
           </FeaturedHeader>
           <EmergenceFrame
+            ref={iframeRef}
             src="/emergence.html"
             title="Emergence Visualization"
             allow="fullscreen"
