@@ -36,7 +36,7 @@ const Section = styled.section`
 `;
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false); 
+  const [isDarkMode, setIsDarkMode] = useState(true); 
   const toggleTheme = () => setIsDarkMode(prev => !prev);
 
   return (
