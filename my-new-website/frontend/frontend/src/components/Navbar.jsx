@@ -10,13 +10,13 @@ const NavWrapper = styled.nav`
   align-items: center;
   padding: 1rem 2rem;
   position: fixed;
-  top: 0;
+  top: var(--banner-offset, 0px);
   left: 0;
   width: 100%;
   z-index: 100;
   background: ${({ theme }) => theme.colors.navBg};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  transition: background-color 0.4s ease, border-color 0.4s ease;
+  transition: background-color 0.4s ease, border-color 0.4s ease, top 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
 const Logo = styled.a`
