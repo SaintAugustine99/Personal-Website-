@@ -6,6 +6,7 @@ import { GlobalStyles } from './styles/GlobalStyles.js';
 import styled from 'styled-components';
 
 import Navbar from './components/Navbar.jsx';
+import UpdateBanner from './components/UpdateBanner.jsx';
 import Footer from './components/Footer.jsx';
 import AbstractCanvas from './components/AbstractCanvas.jsx';
 
@@ -43,6 +44,7 @@ function App() {
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <GlobalStyles />
       <AbstractCanvas />
+      <UpdateBanner />
       <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       
       <MainFlow>
