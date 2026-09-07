@@ -6,7 +6,6 @@ import { GlobalStyles } from './styles/GlobalStyles.js';
 import styled from 'styled-components';
 
 import Navbar from './components/Navbar.jsx';
-import UpdateBanner from './components/UpdateBanner.jsx';
 import Footer from './components/Footer.jsx';
 import AbstractCanvas from './components/AbstractCanvas.jsx';
 
@@ -17,6 +16,7 @@ import HorizontalGallery from './components/HorizontalGallery.jsx';
 import HorizontalLabGallery from './components/HorizontalLabGallery.jsx';
 import Blog from './pages/Blog.jsx';
 import Contact from './pages/Contact.jsx';
+import Holding from './pages/Holding.jsx';
 
 const MainFlow = styled.main`
   width: 100%;
@@ -36,15 +36,26 @@ const Section = styled.section`
   border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
+// Flip to false to bring the full site back — everything below still works.
+const HOLDING_MODE = true;
+
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true); 
   const toggleTheme = () => setIsDarkMode(prev => !prev);
+
+  if (HOLDING_MODE) {
+    return (
+      <ThemeProvider theme={darkTheme}>
+        <GlobalStyles />
+        <Holding />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <GlobalStyles />
       <AbstractCanvas />
-      <UpdateBanner />
       <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
       
       <MainFlow>
