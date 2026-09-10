@@ -5,7 +5,11 @@ import React from 'react';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
 import { motion } from 'framer-motion';
 
+// EMAIL is the one way through the holding page. The contact form lives on
+// the site proper, which is gated off while HOLDING_MODE is on, so without
+// this there is no way to reach me at all.
 const LINKS = [
+  { label: 'EMAIL', href: 'mailto:kevinogetobwoma@gmail.com' },
   { label: 'X', href: 'https://x.com/OnserioOgeto' },
   { label: 'GITHUB', href: 'https://github.com/SaintAugustine99' },
 ];
@@ -173,11 +177,18 @@ const Holding = () => (
 
     <Bottom variants={fade} custom={3} initial="hidden" animate="show">
       <Links>
-        {LINKS.map(({ label, href }) => (
-          <a key={href} href={href} target="_blank" rel="noopener noreferrer">
-            {label}
-          </a>
-        ))}
+        {LINKS.map(({ label, href }) => {
+          const external = !href.startsWith('mailto:');
+          return (
+            <a
+              key={href}
+              href={href}
+              {...(external && { target: '_blank', rel: 'noopener noreferrer' })}
+            >
+              {label}
+            </a>
+          );
+        })}
       </Links>
     </Bottom>
   </Screen>
