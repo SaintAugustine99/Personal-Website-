@@ -1,11 +1,13 @@
 // src/meadow/WritingRow.jsx
-// One line in a list of writing. Published pieces link somewhere; drafts
-// carry a premise and no link.
+// One line in a list of writing. Published pieces open their page (or an
+// outside `link`, for work that lives elsewhere); drafts carry a premise and
+// go nowhere yet.
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { KIND_LABEL } from '../content/site.js';
 
-const WritingRow = ({ kind, title, premise, date, href, status }) => {
+const WritingRow = ({ entry, draft = false }) => {
+  const { kind = 'essay', title, premise, dateLabel, slug, link } = entry;
   const body = (
     <>
       <span className="oo-row-kind">
@@ -16,16 +18,16 @@ const WritingRow = ({ kind, title, premise, date, href, status }) => {
         <span className="oo-row-title">{title}</span>
         {premise && <span className="oo-row-premise">{premise}</span>}
       </span>
-      <span className="oo-row-meta">{date || status}</span>
+      <span className="oo-row-meta">{draft ? 'Drafting' : dateLabel}</span>
     </>
   );
-  if (!href) return <div className="oo-row">{body}</div>;
-  return /^https?:/.test(href) ? (
-    <a className="oo-row" href={href} target="_blank" rel="noopener noreferrer">
+  if (draft) return <div className="oo-row">{body}</div>;
+  return link ? (
+    <a className="oo-row" href={link} target="_blank" rel="noopener noreferrer">
       {body}
     </a>
   ) : (
-    <Link className="oo-row" to={href}>
+    <Link className="oo-row" to={`/writing/${slug}`}>
       {body}
     </Link>
   );

@@ -791,6 +791,13 @@ a.oo-mark {
   .oo-hero {
     padding-bottom: 480px;
   }
+  /* The nav wraps under the wordmark here, so the band needs more shade. */
+  .oo-strip.thin {
+    height: 200px;
+  }
+  .oo-strip.thin .oo-strip-shade {
+    height: 85%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -807,4 +814,254 @@ a.oo-mark {
   .oo-lean {
     transition: none;
   }
+}
+
+/* ---------- inner pages: thin band, dawn ---------- */
+
+.oo-strip.thin {
+  height: clamp(170px, 17vw, 250px);
+}
+.oo-strip.thin .oo-scene img {
+  object-position: 50% 70%;
+}
+.oo-strip.thin .oo-strip-shade {
+  height: 70%;
+}
+.is-dawn .oo-ground {
+  filter: brightness(0.9);
+}
+
+/* ---------- reading: essays and project write-ups ---------- */
+
+.oo-reading {
+  padding: 88px var(--padx) 140px;
+}
+.oo-reading article,
+.oo .oo-reading-back {
+  max-width: 680px;
+  margin-inline: auto;
+}
+.oo .oo-reading-back {
+  margin-top: 56px;
+}
+.oo-reading-head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 56px;
+}
+.oo h1.oo-reading-title {
+  font-size: clamp(2.4rem, 5vw, 4.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.oo p.oo-reading-premise {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  line-height: 1.4;
+  color: var(--muted);
+}
+.oo-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px 32px;
+  margin: 0 0 48px;
+  padding: 20px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+.oo-reading-head .oo-facts {
+  margin: 12px 0 0;
+}
+.oo-facts dt {
+  color: var(--muted);
+}
+.oo-facts dd {
+  margin: 0;
+}
+
+.oo-prose {
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 1.45vw, 1.3125rem);
+  line-height: 1.7;
+}
+.oo .oo-prose > * + * {
+  margin-top: 1.15em;
+}
+.oo .oo-prose h2 {
+  margin-top: 2.2em;
+  font-weight: 400;
+  font-size: 1.6em;
+  line-height: 1.15;
+}
+.oo .oo-prose h3 {
+  margin-top: 1.8em;
+  font-weight: 500;
+  font-size: 1.2em;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.oo .oo-prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--rust);
+}
+.oo .oo-prose a:hover {
+  color: #9a3a24;
+}
+.oo-prose blockquote {
+  margin: 1.6em 1.5em;
+  font-style: italic;
+  font-size: 1.12em;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.oo-prose ul,
+.oo-prose ol {
+  padding-left: 1.3em;
+}
+.oo-prose li + li {
+  margin-top: 0.4em;
+}
+.oo-prose code {
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  background: #e3dac6;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.82em;
+}
+.oo-prose pre {
+  padding: 20px 24px;
+  overflow-x: auto;
+  background: var(--ink);
+  color: var(--bone);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.oo-prose pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+/* Pictures step out of the column, like a plate in a book. */
+.oo .oo-prose figure,
+.oo-hang {
+  width: min(100vw - 2 * var(--padx), 1040px);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+.oo .oo-prose figure {
+  margin-top: 2.2em;
+  margin-bottom: 2.2em;
+}
+.oo-prose figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.oo-prose figcaption {
+  margin-top: 12px;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.oo .oo-prose sup a {
+  padding: 0 0.15em;
+  font-family: var(--sans);
+  font-size: 0.72em;
+  text-decoration: none;
+  color: var(--rust);
+}
+.oo .oo-prose .oo-notes {
+  margin-top: 3em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.oo .oo-prose .oo-break {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 2.6em 0;
+}
+.oo-endmark {
+  display: flex;
+  justify-content: center;
+  gap: 0.24em;
+  margin-top: 72px;
+  font-size: 28px;
+}
+
+.oo-hang {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.oo-hang .oo-mat {
+  width: 100%;
+  margin: 0;
+}
+.oo-hang .oo-mat > div {
+  aspect-ratio: 16 / 10;
+}
+.oo-hang iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #101010;
+}
+
+/* ---------- indexes ---------- */
+
+.oo-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 64px;
+  padding: 40px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+}
+.oo-feature-title {
+  max-width: 20ch;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2rem, 4.4vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
+.oo-feature-premise {
+  max-width: 52ch;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 21px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.oo a.oo-feature:hover .oo-feature-title {
+  color: #9a3a24;
+}
+.oo-work-link {
+  display: block;
+}
+.oo-work-title a {
+  text-decoration: none;
+}
+
+/* On paper the moon needs an edge to be seen. */
+.oo-endmark .oo-orb.moon {
+  box-shadow: 0 0 0 1px var(--rule);
 }
