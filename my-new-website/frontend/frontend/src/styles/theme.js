@@ -81,14 +81,16 @@ export const displayType = `
 `;
 
 export const minimalTokens = {
-  bg: '#131211',
-  text: '#f1efec',
-  textDim: 'rgba(241, 239, 236, 0.62)',
-  meta: 'rgba(241, 239, 236, 0.45)',
-  metaDim: 'rgba(241, 239, 236, 0.42)',
-  rule: 'rgba(241, 239, 236, 0.18)',
-  ruleFaint: 'rgba(241, 239, 236, 0.12)',
-  accent: '#e0785e',
+  // Repainted to the meadow palette (src/meadow/meadow.css) so Contact and the
+  // coming-soon pages sit on the same paper as Home and Writing.
+  bg: '#eee7d8',
+  text: '#211e1b',
+  textDim: 'rgba(33, 30, 27, 0.8)',
+  meta: 'rgba(33, 30, 27, 0.68)',
+  metaDim: 'rgba(33, 30, 27, 0.68)',
+  rule: 'rgba(33, 30, 27, 0.24)',
+  ruleFaint: 'rgba(33, 30, 27, 0.14)',
+  accent: '#b5452c',
   // The page runs edge to edge; padX is the only margin, so it is what keeps
   // the wordmark and footer off the very edge of the glass.
   padX: 'clamp(1.5rem, 5.6vw, 6rem)',

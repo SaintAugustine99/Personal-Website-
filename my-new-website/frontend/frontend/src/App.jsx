@@ -1,6 +1,8 @@
 /* frontend/src/App.jsx */
-// The site is now routed. Home and Contact are real; every other section
-// renders ComingSoon until there is work worth putting behind it.
+// The site is now routed. Home, Writing and Contact are real; every other
+// section renders ComingSoon until there is work worth putting behind it.
+// Home and Writing are the meadow design (src/meadow); their content lives in
+// src/content/site.js.
 //
 // The single-page scroll layout this replaces (HeroParallax, BranchingSection,
 // the horizontal galleries, About/Blog/Portfolio/Experiments) is still in the
@@ -12,6 +14,7 @@ import { darkTheme } from './styles/theme.js';
 import { GlobalStyles } from './styles/GlobalStyles.js';
 
 import Home from './pages/Home.jsx';
+import Writing from './pages/Writing.jsx';
 import Contact from './pages/Contact.jsx';
 import ComingSoon from './pages/ComingSoon.jsx';
 
@@ -19,7 +22,6 @@ import ComingSoon from './pages/ComingSoon.jsx';
 const HOLDING_MODE = false;
 
 const PLACEHOLDERS = [
-  { path: '/writing', title: 'Writing', note: 'Essays in progress. I would rather publish these late than publish them thin.' },
   { path: '/projects', title: 'Projects', note: 'Being reworked from the ground up — new questions, fewer demos.' },
 ];
 
@@ -42,6 +44,7 @@ function App() {
       <GlobalStyles />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/writing" element={<Writing />} />
         <Route path="/contact" element={<Contact />} />
         {PLACEHOLDERS.map(({ path, title, note }) => (
           <Route key={path} path={path} element={<ComingSoon title={title} note={note} />} />

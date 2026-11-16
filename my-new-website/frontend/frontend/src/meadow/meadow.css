@@ -1,0 +1,810 @@
+/* The meadow design language: one painted field, seen at different hours.
+   Everything is scoped under .oo so it cannot leak into the older pages, and
+   the first block undoes the brutalist GlobalStyles those pages still use. */
+
+.oo {
+  --padx: clamp(1.5rem, 5.6vw, 6rem);
+  --top: 128px; /* distance from the top of the hero to the wordmark */
+  --serif: 'Newsreader', Georgia, serif;
+  --sans: 'Instrument Sans', system-ui, sans-serif;
+  --paper: #eee7d8;
+  --ink: #211e1b;
+  --ink-soft: #3a342e;
+  --muted: #5a524a;
+  --rule: #bdb09a;
+  --rule-soft: #d6ccb9;
+  --rust: #b5452c;
+  --night: #101f45;
+  --bone: #f3ecd9;
+  --ochre: #f0c050;
+
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.oo h1,
+.oo h2,
+.oo h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: inherit;
+}
+.oo p {
+  margin: 0;
+  max-width: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+}
+.oo a {
+  color: inherit;
+  font-weight: inherit;
+}
+.oo a:hover {
+  color: inherit;
+}
+.oo ::selection {
+  background: var(--ochre);
+  color: var(--ink);
+}
+
+/* ---------- the painting ---------- */
+
+.oo-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.oo-scene.is-mirrored {
+  transform: scaleX(-1);
+}
+.oo-scene img,
+.oo-scene .oo-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.oo-scene img {
+  object-fit: cover;
+  object-position: 50% 100%;
+  user-select: none;
+  pointer-events: none;
+}
+.oo-scene.is-strip img {
+  object-position: 50% 82%;
+}
+
+/* Day text sits on a lighter sky, so the upper sky is deepened a little. */
+.oo-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(11, 24, 56, 0.34) 0%,
+    rgba(11, 24, 56, 0.34) 48%,
+    rgba(11, 24, 56, 0) 64%
+  );
+  transition: opacity 2.5s ease;
+}
+.oo-sky-night {
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+.oo-ground,
+.oo-figure,
+.oo-bloom {
+  transition: filter 2.5s ease;
+}
+.is-night .oo-sky-night {
+  opacity: 1;
+}
+.is-night .oo-scrim,
+.is-night .oo-birds {
+  opacity: 0;
+}
+.is-night .oo-ground {
+  filter: brightness(0.6) saturate(0.9);
+}
+.is-night .oo-figure {
+  filter: brightness(0.62);
+}
+.is-night .oo-bloom {
+  filter: brightness(0.82);
+}
+.is-dusk .oo-scrim,
+.is-dusk .oo-birds {
+  opacity: 0;
+}
+.is-dusk .oo-ground {
+  filter: brightness(0.85);
+}
+.is-dusk .oo-figure {
+  filter: brightness(0.9);
+}
+
+/* Candle: only after dark, just enough to make out the figure. */
+.oo-glow {
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+.is-night .oo-glow {
+  opacity: 1;
+  animation: oo-candle 3.4s ease-in-out infinite;
+}
+@keyframes oo-candle {
+  0%, 100% { opacity: 1; }
+  22% { opacity: 0.86; }
+  41% { opacity: 0.97; }
+  63% { opacity: 0.8; }
+  82% { opacity: 0.94; }
+}
+
+/* Wind. Each flower depth is a full-width layer skewed from its base, so the
+   near flowers travel further than the far ones. --gx comes from the pointer. */
+.oo-lean {
+  position: absolute;
+  left: -2%;
+  top: 0;
+  width: 104%;
+  height: 100%;
+  transform-origin: 50% 100%;
+  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.oo-lean.l1 { transform: skewX(calc(var(--gx, 0) * 0.35deg)); }
+.oo-lean.l2 { transform: skewX(calc(var(--gx, 0) * 0.7deg)); }
+.oo-lean.l3 { transform: skewX(calc(var(--gx, 0) * 1.1deg)); }
+.oo-sway {
+  transform-origin: 50% 100%;
+  animation: oo-gust 9s ease-in-out infinite;
+}
+.oo-lean.l2 .oo-sway { animation-duration: 7s; animation-delay: -2.5s; }
+.oo-lean.l3 .oo-sway { animation-duration: 5.6s; animation-delay: -4s; }
+@keyframes oo-gust {
+  0%, 100% { transform: skewX(0deg); }
+  18% { transform: skewX(-0.9deg); }
+  34% { transform: skewX(-0.3deg); }
+  52% { transform: skewX(-1.25deg); }
+  74% { transform: skewX(0.35deg); }
+}
+
+.oo-birds {
+  transition: opacity 2.5s ease;
+}
+.oo-bird {
+  position: absolute;
+  left: -40px;
+  top: 47%;
+  animation: oo-bird 52s linear infinite;
+}
+.oo-bird.b2 {
+  top: 50%;
+  animation-duration: 64s;
+  animation-delay: -20s;
+}
+@keyframes oo-bird {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(55vw, -36px); }
+  100% { transform: translate(112vw, -10px); }
+}
+
+.oo-flies {
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+.is-night .oo-flies {
+  opacity: 1;
+}
+.oo-ff {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #f4e58a;
+  box-shadow: 0 0 10px 3px rgba(240, 220, 110, 0.55);
+  animation: oo-ff 9s ease-in-out infinite;
+}
+.oo-ff.f1 { animation-duration: 11s; animation-delay: -3s; }
+.oo-ff.f2 { animation-duration: 7.5s; animation-delay: -5s; }
+.oo-ff.f3 { animation-duration: 13s; animation-delay: -8s; }
+.oo-ff.f4 { animation-duration: 10s; animation-delay: -1.5s; }
+@keyframes oo-ff {
+  0% { transform: translate(0, 0); opacity: 0; }
+  12% { opacity: 1; }
+  30% { transform: translate(22px, -16px); opacity: 0.15; }
+  48% { transform: translate(40px, -6px); opacity: 1; }
+  66% { transform: translate(26px, -28px); opacity: 0; }
+  84% { transform: translate(8px, -12px); opacity: 0.9; }
+  100% { transform: translate(0, 0); opacity: 0; }
+}
+
+/* ---------- wordmark: the O's are the sun and the moon ---------- */
+
+.oo-mark {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.05em 0.24em;
+  width: fit-content;
+  max-width: 100%;
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--bone);
+  text-decoration: none;
+}
+.oo-mark > span {
+  display: flex;
+  align-items: baseline;
+}
+.oo-orb {
+  display: block;
+  flex: none;
+  width: 0.64em;
+  height: 0.64em;
+  margin-right: 0.04em;
+}
+.oo-orb.sun {
+  border-radius: 51% 49% 52% 48% / 49% 52% 48% 51%;
+  background: radial-gradient(circle at 38% 34%, #f4c656, #db981c 72%);
+}
+.oo-orb.moon {
+  border-radius: 49% 51% 48% 52% / 52% 48% 51% 49%;
+  background: radial-gradient(circle at 40% 36%, #fffbef, #e6dcc2 76%);
+  box-shadow: 0 0 0.2em rgba(255, 246, 220, 0.4);
+}
+.oo-rest {
+  display: block;
+  overflow-x: clip;
+  overflow-y: visible;
+  white-space: nowrap;
+}
+.oo h1.oo-mark {
+  position: relative;
+  z-index: 2;
+  margin-top: 56px;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 9.5vw, 10.5rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--bone);
+}
+a.oo-mark {
+  min-height: 44px;
+  font-size: 26px;
+  line-height: 1.7;
+}
+
+/* Opening: sun and moon rise out of the flowers, hold, then settle into the
+   name. Only runs when .intro is on the page root. */
+.intro h1.oo-mark {
+  animation: oo-rise-mark 4.6s cubic-bezier(0.65, 0, 0.25, 1) both;
+}
+.intro h1.oo-mark .oo-orb {
+  animation: oo-dawn 1.4s ease-out both;
+}
+.intro h1.oo-mark .oo-rest {
+  animation: oo-unfurl 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 3.5s both;
+}
+.intro .rise {
+  animation: oo-rise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 4.3s both;
+}
+.intro .rise.d1 { animation-delay: 4.5s; }
+.intro .rise.d2 { animation-delay: 4.7s; }
+@keyframes oo-rise-mark {
+  0% {
+    transform: translate(calc(50vw - var(--padx) - 50%), calc(62vh - var(--top) - 50%)) scale(1.5);
+  }
+  26%, 52% {
+    transform: translate(calc(50vw - var(--padx) - 50%), calc(40vh - var(--top) - 50%)) scale(1.5);
+  }
+  84%, 100% {
+    transform: none;
+  }
+}
+@keyframes oo-dawn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes oo-unfurl {
+  from { max-width: 0; opacity: 0; }
+  to { max-width: 4em; opacity: 1; }
+}
+@keyframes oo-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- shared pieces ---------- */
+
+.oo-bar {
+  position: relative;
+  min-height: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 24px;
+  font-size: 14px;
+  color: #c5cce0;
+}
+.oo-nav {
+  display: flex;
+  gap: 28px;
+  margin-left: auto;
+}
+.oo-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.3s ease;
+}
+.oo .oo-nav a:hover,
+.oo .oo-nav a[aria-current='page'] {
+  color: #fff;
+}
+.oo-nav a[aria-current='page'] {
+  border-bottom-color: var(--ochre);
+}
+
+.oo-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: var(--rust);
+  transition: text-decoration-color 0.3s ease, color 0.3s ease;
+}
+.oo .oo-link:hover {
+  color: #9a3a24;
+}
+.oo-link.on-dark {
+  text-decoration-color: #8fa0cc;
+}
+.oo .oo-link.on-dark:hover {
+  color: #fff;
+  text-decoration-color: var(--ochre);
+}
+
+.oo-section {
+  padding: 120px var(--padx);
+}
+.oo-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px 64px;
+}
+.oo h2.oo-title {
+  font-size: clamp(2rem, 4.4vw, 4rem);
+}
+.oo p.oo-aside {
+  max-width: 36ch;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.oo p.oo-empty {
+  margin-top: 28px;
+  max-width: 40ch;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  line-height: 1.25;
+  color: var(--muted);
+}
+.oo h2.oo-group {
+  margin-top: 40px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.oo-rows {
+  display: flex;
+  flex-direction: column;
+}
+.oo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  text-decoration: none;
+  transition: padding 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.3s ease;
+}
+.oo a.oo-row:hover {
+  padding-left: 14px;
+  color: #9a3a24;
+}
+.oo-row-kind {
+  flex: 0 0 88px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.oo-dab {
+  width: 11px;
+  height: 11px;
+  border-radius: 52% 48% 50% 50% / 48% 52% 49% 51%;
+  background: var(--rust);
+}
+.oo-dab.essay { background: #db981c; }
+.oo-dab.paper { background: #b5452c; }
+.oo-dab.idea { background: #3f6e2c; }
+.oo-row-main {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.oo-row-title {
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.oo-row-premise {
+  max-width: 60ch;
+  font-size: 16px;
+  color: var(--muted);
+}
+.oo-row-meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- home ---------- */
+
+.oo-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: max(100svh, 760px);
+  padding: 28px var(--padx) clamp(300px, 30vw, 460px);
+  background: var(--night);
+  color: var(--bone);
+}
+.oo-hero-copy {
+  position: relative;
+  margin-top: 56px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 32px 96px;
+}
+.oo p.oo-statement {
+  flex: 2 1 460px;
+  max-width: 21ch;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.6rem, 3.1vw, 3rem);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.oo-statement em {
+  color: var(--ochre);
+}
+.oo-hero-side {
+  flex: 1 1 300px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+  font-size: 17px;
+}
+.oo-hero-side p {
+  line-height: 1.65;
+  color: #e3e6f0;
+}
+.oo-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 28px;
+}
+
+.oo-works {
+  margin-top: 72px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 64px 96px;
+  align-items: start;
+}
+.oo-work {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.oo-mat {
+  margin-bottom: 12px;
+  padding: clamp(20px, 3vw, 40px);
+  background: #8d6f78;
+}
+.oo-work:nth-child(3n + 2) .oo-mat { background: #b08a2e; }
+.oo-work:nth-child(3n + 3) .oo-mat { background: #3f5a4c; }
+.oo-mat > div {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #101010;
+}
+.oo-mat img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.oo-work:hover .oo-mat img {
+  transform: scale(1.015);
+}
+.oo h3.oo-work-title {
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+.oo p.oo-work-meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+.oo p.oo-work-text {
+  margin-top: 8px;
+  max-width: 46ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.oo-about {
+  padding: 140px var(--padx) 160px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 48px 96px;
+}
+.oo-portrait {
+  flex: 1 1 240px;
+  max-width: 340px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #ddd2bd;
+}
+.oo-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.oo-about-text {
+  flex: 999 1 420px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.oo h2.oo-about-lede {
+  max-width: 26ch;
+  font-size: clamp(1.7rem, 3.1vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.oo-about-text p {
+  max-width: 60ch;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.oo-about-text p.oo-tools {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ---------- writing ---------- */
+
+.oo-strip {
+  position: relative;
+  overflow: hidden;
+  height: clamp(300px, 30vw, 440px);
+  padding: 28px var(--padx) 0;
+  background: #18204e;
+  color: var(--bone);
+}
+.oo-strip-shade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 46%;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 20, 56, 0.72) 0%,
+    rgba(18, 20, 56, 0.45) 55%,
+    rgba(18, 20, 56, 0) 100%
+  );
+}
+.oo-strip .oo-bar {
+  color: #e3e6f0;
+}
+.oo-page-main {
+  padding: 96px var(--padx) 140px;
+}
+.oo h1.oo-page-title {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.oo-tabs {
+  margin-top: 56px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 28px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.oo-tabs button {
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.oo-tabs button:hover,
+.oo-tabs button[aria-pressed='true'] {
+  border-bottom-color: var(--rust);
+}
+.oo-tabs button[aria-pressed='true'] {
+  color: var(--ink);
+}
+
+/* ---------- footer: the page ends at night ---------- */
+
+.oo-footer {
+  position: relative;
+  overflow: hidden;
+  padding: 0 var(--padx) 32px;
+  background: var(--night);
+  color: var(--bone);
+}
+.oo-footer-ridge {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 100%;
+  height: clamp(60px, 8vw, 120px);
+  display: block;
+}
+.oo-footer-moon {
+  position: absolute;
+  right: clamp(24px, 9vw, 150px);
+  top: clamp(120px, 14vw, 210px);
+  width: clamp(72px, 11vw, 168px);
+  aspect-ratio: 1 / 1;
+  border-radius: 49% 51% 48% 52% / 52% 48% 51% 49%;
+  background: radial-gradient(circle at 40% 36%, #fffbef, #e6dcc2 76%);
+  box-shadow: 0 0 60px rgba(255, 246, 220, 0.35);
+}
+.oo-footer-inner {
+  position: relative;
+  padding-top: clamp(180px, 18vw, 260px);
+}
+.oo h2.oo-footer-title {
+  font-size: clamp(2.5rem, 7vw, 7.5rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+.oo-footer-row {
+  margin-top: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px 64px;
+}
+.oo-footer-row p {
+  max-width: 40ch;
+  font-size: 17px;
+  color: #c5cce0;
+}
+.oo-footer-mail {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.oo-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  font-size: 17px;
+}
+.oo-footer-base {
+  margin-top: 96px;
+  padding-top: 16px;
+  border-top: 1px solid #33457a;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 32px;
+  font-size: 14px;
+  color: #c5cce0;
+}
+.oo-replay {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.oo-replay:hover {
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .oo-hide-sm {
+    display: none;
+  }
+  .oo-nav {
+    gap: 18px;
+  }
+  /* On a phone the copy runs further down the sky; a taller field keeps the
+     horizon and its clouds clear of the text. */
+  .oo-hero {
+    padding-bottom: 480px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro h1.oo-mark,
+  .intro h1.oo-mark .oo-orb,
+  .intro h1.oo-mark .oo-rest,
+  .intro .rise,
+  .oo-sway,
+  .oo-bird,
+  .oo-ff,
+  .is-night .oo-glow {
+    animation: none;
+  }
+  .oo-lean {
+    transition: none;
+  }
+}
