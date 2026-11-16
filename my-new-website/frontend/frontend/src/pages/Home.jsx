@@ -2,8 +2,8 @@
 // The meadow. The hero is the painting itself; on a first visit the sun and
 // moon rise out of the flowers and settle into the name.
 //
-// Writing and Projects read from src/content/site.js. While those lists are
-// empty the sections say so in a sentence rather than showing sample rows.
+// Writing and Projects come from the Markdown files in src/content. While
+// those folders are empty the sections say so in a sentence.
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../meadow/meadow.css';
@@ -13,7 +13,9 @@ import SiteNav from '../meadow/SiteNav.jsx';
 import SiteFooter from '../meadow/SiteFooter.jsx';
 import WritingRow from '../meadow/WritingRow.jsx';
 import { CONTACT_EMAIL } from '../config/api.js';
-import { WRITING, PROJECTS, PORTRAIT } from '../content/site.js';
+import WorkCard from '../meadow/WorkCard.jsx';
+import { WRITING, PROJECTS } from '../lib/content.js';
+import { PORTRAIT } from '../content/site.js';
 
 const INTRO_KEY = 'oo-intro-seen';
 
@@ -93,8 +95,8 @@ const Home = () => {
         {WRITING.length > 0 ? (
           <>
             <div className="oo-rows" style={{ marginTop: 56, borderTop: '1px solid var(--rule)' }}>
-              {WRITING.slice(0, 4).map((piece) => (
-                <WritingRow key={piece.title} {...piece} />
+              {WRITING.slice(0, 4).map((entry) => (
+                <WritingRow key={entry.slug} entry={entry} />
               ))}
             </div>
             <p style={{ marginTop: 28 }}>
@@ -120,26 +122,8 @@ const Home = () => {
         </div>
         {PROJECTS.length > 0 ? (
           <div className="oo-works">
-            {PROJECTS.map(({ title, meta, text, image, href, cta }) => (
-              <article className="oo-work" key={title}>
-                {image && (
-                  <div className="oo-mat">
-                    <div>
-                      <img src={image} alt="" loading="lazy" />
-                    </div>
-                  </div>
-                )}
-                <h3 className="oo-work-title">
-                  <em>{title}</em>
-                </h3>
-                {meta && <p className="oo-work-meta">{meta}</p>}
-                {text && <p className="oo-work-text">{text}</p>}
-                {href && (
-                  <a className="oo-link" href={href} target="_blank" rel="noopener noreferrer" style={{ alignSelf: 'flex-start' }}>
-                    {cta || 'Open it'}
-                  </a>
-                )}
-              </article>
+            {PROJECTS.slice(0, 3).map((entry) => (
+              <WorkCard key={entry.slug} entry={entry} />
             ))}
           </div>
         ) : (

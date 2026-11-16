@@ -1,14 +1,16 @@
 // src/pages/Writing.jsx
-// The same meadow at dusk, mirrored, as a strip across the top. Lists come
-// from src/content/site.js; with nothing published the page says so.
+// The index of everything written: the meadow at dusk across the top, one
+// featured piece if there is one, work in progress, then the archive by year.
+// Entries are the Markdown files in src/content/writing.
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../meadow/meadow.css';
-import MeadowScene from '../meadow/MeadowScene.jsx';
-import Wordmark from '../meadow/Wordmark.jsx';
-import SiteNav from '../meadow/SiteNav.jsx';
+import PageHeader from '../meadow/PageHeader.jsx';
 import SiteFooter from '../meadow/SiteFooter.jsx';
 import WritingRow from '../meadow/WritingRow.jsx';
-import { WRITING, DRAFTS } from '../content/site.js';
+import { WRITING, DRAFTS } from '../lib/content.js';
+import { byYear } from '../lib/frontmatter.js';
+import { KIND_LABEL } from '../content/site.js';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -19,18 +21,15 @@ const FILTERS = [
 
 const Writing = () => {
   const [filter, setFilter] = useState('all');
-  const published = WRITING.filter((p) => filter === 'all' || p.kind === filter);
+  const featured = WRITING.find((e) => e.featured);
+  const shown = WRITING.filter((e) => filter === 'all' || (e.kind || 'essay') === filter);
+  // Only offer filters for kinds that exist.
+  const kinds = new Set(WRITING.map((e) => e.kind || 'essay'));
+  const filters = FILTERS.filter(({ id }) => id === 'all' || kinds.has(id));
 
   return (
     <div className="oo">
-      <header className="oo-strip">
-        <MeadowScene time="dusk" strip mirrored />
-        <div className="oo-strip-shade" aria-hidden="true" />
-        <div className="oo-bar">
-          <Wordmark />
-          <SiteNav />
-        </div>
-      </header>
+      <PageHeader hour="dusk" mirrored />
 
       <main className="oo-page-main">
         <div className="oo-section-head">
@@ -40,12 +39,23 @@ const Writing = () => {
           </p>
         </div>
 
+        {featured && (
+          <Link className="oo-feature" to={`/writing/${featured.slug}`}>
+            <span className="oo-row-kind">
+              <span className={`oo-dab ${featured.kind || 'essay'}`} aria-hidden="true" />
+              {KIND_LABEL[featured.kind] || 'Essay'}, {featured.dateLabel}
+            </span>
+            <span className="oo-feature-title">{featured.title}</span>
+            {featured.premise && <span className="oo-feature-premise">{featured.premise}</span>}
+          </Link>
+        )}
+
         {DRAFTS.length > 0 && (
           <>
-            <h2 className="oo-group" style={{ marginTop: 56 }}>In progress</h2>
+            <h2 className="oo-group" style={{ marginTop: 72 }}>In progress</h2>
             <div className="oo-rows">
-              {DRAFTS.map((piece) => (
-                <WritingRow key={piece.title} status="Drafting" {...piece} />
+              {DRAFTS.map((entry) => (
+                <WritingRow key={entry.slug} entry={entry} draft />
               ))}
             </div>
           </>
@@ -53,23 +63,25 @@ const Writing = () => {
 
         {WRITING.length > 0 ? (
           <>
-            <div className="oo-tabs" role="group" aria-label="Filter writing">
-              {FILTERS.map(({ id, label }) => (
-                <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}>
-                  {label}
-                </button>
-              ))}
-            </div>
-            <h2 className="oo-group">Published</h2>
-            {published.length > 0 ? (
-              <div className="oo-rows">
-                {published.map((piece) => (
-                  <WritingRow key={piece.title} {...piece} />
+            {filters.length > 2 && (
+              <div className="oo-tabs" role="group" aria-label="Filter writing">
+                {filters.map(({ id, label }) => (
+                  <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}>
+                    {label}
+                  </button>
                 ))}
               </div>
-            ) : (
-              <p className="oo-empty">Nothing of that kind yet.</p>
             )}
+            {byYear(shown).map(({ year, items }) => (
+              <React.Fragment key={year}>
+                <h2 className="oo-group" style={{ marginTop: 56 }}>{year}</h2>
+                <div className="oo-rows">
+                  {items.map((entry) => (
+                    <WritingRow key={entry.slug} entry={entry} />
+                  ))}
+                </div>
+              </React.Fragment>
+            ))}
           </>
         ) : (
           <>

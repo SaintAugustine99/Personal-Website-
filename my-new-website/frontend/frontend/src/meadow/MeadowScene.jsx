@@ -13,6 +13,9 @@ const FIREFLIES = [
   [61, 73], [72, 84], [79, 68], [86, 77], [93, 90], [13, 93], [68, 64],
 ];
 
+// Hours that have a sky of their own and never change.
+const FIXED = { dawn: 'sky-dawn.webp', dusk: 'sky-dusk.webp' };
+
 const isNightNow = () => {
   const now = new Date();
   const hour = now.getHours() + now.getMinutes() / 60;
@@ -47,12 +50,14 @@ const Bird = ({ className = '', size = 26 }) => (
   </svg>
 );
 
-// time: 'auto' | 'day' | 'night' | 'dusk'
+// time: 'auto' | 'day' | 'night' | 'dawn' | 'dusk'
+// ('auto', 'day' and 'night' share the living sky; dawn and dusk are fixed)
 // strip: a short header band rather than a full-height hero
 // mirrored: flips the field, so the figure sits somewhere new on each page
 const MeadowScene = ({ time = 'auto', strip = false, mirrored = false }) => {
   const ref = useRef(null);
   const hour = useHour(time);
+  const fixed = FIXED[hour];
 
   // The flowers tip slightly away from the pointer, more as it nears them.
   useEffect(() => {
@@ -86,8 +91,8 @@ const MeadowScene = ({ time = 'auto', strip = false, mirrored = false }) => {
 
   return (
     <div ref={ref} className={classes} aria-hidden="true">
-      {hour === 'dusk' ? (
-        <img src={`${SRC}/sky-dusk.webp`} alt="" />
+      {fixed ? (
+        <img src={`${SRC}/${fixed}`} alt="" />
       ) : (
         <>
           <img src={`${SRC}/sky-day.webp`} alt="" />
@@ -101,7 +106,7 @@ const MeadowScene = ({ time = 'auto', strip = false, mirrored = false }) => {
       )}
       <img className="oo-ground" src={`${SRC}/ground.webp`} alt="" />
       <img className="oo-figure" src={`${SRC}/figure.webp`} alt="" />
-      {hour !== 'dusk' && <img className="oo-glow" src={`${SRC}/glow.jpg`} alt="" />}
+      {!fixed && <img className="oo-glow" src={`${SRC}/glow.jpg`} alt="" />}
       <div className="oo-lean l1">
         <img className="oo-sway oo-bloom" src={`${SRC}/flowers-back.webp`} alt="" />
       </div>
@@ -111,7 +116,7 @@ const MeadowScene = ({ time = 'auto', strip = false, mirrored = false }) => {
       <div className="oo-lean l3">
         <img className="oo-sway oo-bloom" src={`${SRC}/flowers-front.webp`} alt="" />
       </div>
-      {hour !== 'dusk' && (
+      {!fixed && (
         <div className="oo-fill oo-flies">
           {FIREFLIES.map(([left, top], i) => (
             <span key={i} className={`oo-ff f${i % 5}`} style={{ left: `${left}%`, top: `${top}%` }} />
