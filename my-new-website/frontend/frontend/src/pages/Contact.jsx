@@ -44,19 +44,19 @@ const fieldStyles = `
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(241, 239, 236, 0.12);
+  border-bottom: 1px solid ${t.ruleFaint};
   border-radius: 0;
   padding: 0.9em 0;
   font: inherit;
-  color: #f1efec;
+  color: ${t.text};
   outline: none;
 
   &::placeholder {
-    color: rgba(241, 239, 236, 0.42);
+    color: ${t.meta};
   }
 
   &:focus {
-    border-bottom-color: #e0785e;
+    border-bottom-color: ${t.accent};
   }
 `;
 
