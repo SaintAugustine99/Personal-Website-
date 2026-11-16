@@ -18,7 +18,7 @@ const SiteFooter = ({ onReplay }) => (
       <h2 className="oo-footer-title">Get in touch.</h2>
       <div className="oo-footer-row">
         <div>
-          <p>Open to research and engineering roles, and to good questions.</p>
+          <p>Open to generalist roles, and to good questions.</p>
           <a className="oo-link on-dark oo-footer-mail" href={`mailto:${CONTACT_EMAIL}`}>
             {CONTACT_EMAIL}
           </a>
