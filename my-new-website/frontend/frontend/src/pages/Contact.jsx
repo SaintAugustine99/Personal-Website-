@@ -3,8 +3,8 @@
 // language of design_handoff_home_redesign.
 //
 // Delivery goes through Web3Forms, not the Django backend: there is no backend
-// deployed, and the old code posted to http://127.0.0.1:8000. Set
-// VITE_WEB3FORMS_KEY in Vercel; without it the form falls back to a mailto.
+// deployed, and the old code posted to http://127.0.0.1:8000. The key lives in
+// config/api.js; without one the form falls back to a mailto.
 import React, { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -122,6 +122,17 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // No key configured: hand the message to the visitor's mail app instead
+    // of posting a request that Web3Forms is certain to reject.
+    if (!WEB3FORMS_KEY) {
+      const subject = encodeURIComponent(`Message from ${formData.name}`);
+      const body = encodeURIComponent(`${formData.message}\n\n${formData.name} <${formData.email}>`);
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+      setStatus('mailto');
+      return;
+    }
+
     setStatus('submitting');
 
     try {
@@ -191,6 +202,12 @@ const Contact = () => {
         </Submit>
 
         {status === 'success' && <Status>Sent. I&rsquo;ll get back to you.</Status>}
+        {status === 'mailto' && (
+          <Status>
+            Your mail app should have opened with the message. If it didn&rsquo;t,
+            write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+          </Status>
+        )}
         {status === 'error' && (
           <Status $error>
             Something went wrong. Email me directly at{' '}
